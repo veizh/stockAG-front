@@ -16,8 +16,9 @@ const LoginElement = (props)=>{
         fetch(server+"users/login",{ 
             method:"POST",  
             referrerPolicy:"no-referrer",
+            
             headers: {
-                
+                "Access-Control-Allow-Origin": "*",
               "Accept": "*/*",
             "Content-Type": "application/json"
             },

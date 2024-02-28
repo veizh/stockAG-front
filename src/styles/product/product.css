@@ -1,0 +1,89 @@
+.product__component {
+  width: 100vw;
+  height: 100vh;
+  padding: 90px 20px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product__component .buttons__container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.product__component .buttons__container button {
+  text-align: center;
+  justify-content: center;
+  width: 120px;
+}
+.product__component .buttons__container button {
+  outline: none;
+  border: none;
+  padding: 7px;
+  font-size: 18px;
+  border-radius: 0;
+  background-color: #ed6e0b;
+  color: whitesmoke;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.product__component .buttons__container button svg {
+  width: 22px;
+  margin-bottom: 5px;
+}
+.product__component .buttons__container button:hover {
+  filter: brightness(1.3);
+}
+.product__component .buttons__container button:focus-visible, .product__component .buttons__container button:active {
+  outline: none;
+  border: none;
+}
+.product__component .product__card {
+  padding: 15px 25px;
+  width: 100%;
+  max-width: 500px;
+  border: 2px solid;
+  border-width: 3px;
+  -o-border-image: linear-gradient(135deg, #ed6e0b 0%, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0) 84%, #ed6e0b 100%) 1;
+     border-image: linear-gradient(135deg, #ed6e0b 0%, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0) 84%, #ed6e0b 100%) 1;
+  color: whitesmoke;
+  border-image-slice: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 20px;
+  z-index: 2;
+  overflow: hidden;
+  position: relative;
+  gap: 15px;
+}
+.product__component .product__card:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(26, 26, 26);
+  filter: blur(45px) opacity(0.85);
+}
+.product__component .product__card img {
+  width: 200px;
+  aspect-ratio: 91/81;
+}
+.product__component .product__card .product__item {
+  width: 100%;
+}
+.product__component .product__card .product__item span {
+  font-weight: bold;
+  color: #ed6e0b;
+}
+.product__component .product__card .product__item.name {
+  text-transform: uppercase;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+}/*# sourceMappingURL=product.css.map */

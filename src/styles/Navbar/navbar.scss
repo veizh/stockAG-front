@@ -1,0 +1,128 @@
+@import '../mixins/responsive';
+header{
+    width: 100vw;
+    background: rgb(31, 30, 30);
+
+    height: 90px;
+    top: 0;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 21;
+    
+    .header__container{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        height: 100%;
+        max-width: 1400px;
+    }
+    @include desktop{
+        padding: 0 50px;
+        
+    }
+    .logo__container{
+        width: 100px;
+        height: 100%;
+        @include desktop{
+        }
+    }
+    .lucide-menu{
+        width: 50px;
+        height: 60px;
+        stroke:whitesmoke;
+        cursor: pointer;
+        @include desktop{
+            display: none;
+        }
+    }
+    .lucide-xcircle{
+        width: 50px;
+        height: 60px;
+        stroke:whitesmoke;
+        cursor: pointer;
+        @include desktop{
+            display: none;
+        }
+    }
+    ul{
+        display: none;
+        list-style: none;
+        right: 0;
+        top: 90px;
+        position: fixed;
+        background: rgb(31, 30, 30);
+        gap: 20px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-direction: column;
+        width: 300px;
+        padding: 30px 24px;
+        height: calc(100vh - 90px);
+        z-index: 21;
+
+        @include desktop{
+            all: unset;
+            list-style: none;
+            display: flex;
+            gap:30px ;
+
+        }
+        &.active{
+            display: flex;
+        }
+        li{
+            a{
+                all: unset;
+                cursor: pointer;
+                font-size: 24px;
+                color: whitesmoke;
+                position: relative;
+                transition: 0.3s ease-in-out;
+                @include desktop{
+                       font-size: 24px;
+                    }
+                &:after{
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    width: 0px;
+                    margin-top: 5px;
+                    margin-left: -2px;
+                    height: 2px;
+                    border-radius: 15px;
+                    background-color: #ed6e0b;
+                    transition: 0.3s ease-in-out;
+                    @include desktop{
+                        
+                    margin-top: 2px;
+                    margin-left: 2px;
+                    }
+                }
+                &:hover{
+                    color: #ed6e0b;
+                    &:after{
+                        width: 45%;
+                        @include desktop{
+                        
+                            width: 35%;
+                            }
+                    }
+                }
+                &.active{
+                    color: #ed6e0b;
+                    &:after{
+                        width: 45%;
+                        @include desktop{
+                        
+                            width: 35%;
+                            }
+                    }
+                }
+            }
+        }
+    }
+}

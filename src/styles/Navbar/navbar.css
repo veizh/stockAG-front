@@ -1,0 +1,131 @@
+header {
+  width: 100vw;
+  background: rgb(31, 30, 30);
+  height: 90px;
+  top: 0;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 21;
+}
+header .header__container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  height: 100%;
+  max-width: 1400px;
+}
+@media (min-width: 992px) {
+  header {
+    padding: 0 50px;
+  }
+}
+header .logo__container {
+  width: 100px;
+  height: 100%;
+}
+header .lucide-menu {
+  width: 50px;
+  height: 60px;
+  stroke: whitesmoke;
+  cursor: pointer;
+}
+@media (min-width: 992px) {
+  header .lucide-menu {
+    display: none;
+  }
+}
+header .lucide-xcircle {
+  width: 50px;
+  height: 60px;
+  stroke: whitesmoke;
+  cursor: pointer;
+}
+@media (min-width: 992px) {
+  header .lucide-xcircle {
+    display: none;
+  }
+}
+header ul {
+  display: none;
+  list-style: none;
+  right: 0;
+  top: 90px;
+  position: fixed;
+  background: rgb(31, 30, 30);
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 300px;
+  padding: 30px 24px;
+  height: calc(100vh - 90px);
+  z-index: 21;
+}
+@media (min-width: 992px) {
+  header ul {
+    all: unset;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+}
+header ul.active {
+  display: flex;
+}
+header ul li a {
+  all: unset;
+  cursor: pointer;
+  font-size: 24px;
+  color: whitesmoke;
+  position: relative;
+  transition: 0.3s ease-in-out;
+}
+@media (min-width: 992px) {
+  header ul li a {
+    font-size: 24px;
+  }
+}
+header ul li a:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0px;
+  margin-top: 5px;
+  margin-left: -2px;
+  height: 2px;
+  border-radius: 15px;
+  background-color: #ed6e0b;
+  transition: 0.3s ease-in-out;
+}
+@media (min-width: 992px) {
+  header ul li a:after {
+    margin-top: 2px;
+    margin-left: 2px;
+  }
+}
+header ul li a:hover {
+  color: #ed6e0b;
+}
+header ul li a:hover:after {
+  width: 45%;
+}
+@media (min-width: 992px) {
+  header ul li a:hover:after {
+    width: 35%;
+  }
+}
+header ul li a.active {
+  color: #ed6e0b;
+}
+header ul li a.active:after {
+  width: 45%;
+}
+@media (min-width: 992px) {
+  header ul li a.active:after {
+    width: 35%;
+  }
+}/*# sourceMappingURL=navbar.css.map */

@@ -1,0 +1,106 @@
+.blibliotheque__component {
+  width: 100vw;
+  height: 100vh;
+  padding: 90px 20px 0 20px;
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+.blibliotheque__component.text__alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blibliotheque__component.text__alert .content {
+  width: 80%;
+  max-width: 420px;
+  padding: 20px 30px;
+  background-color: rgb(34, 34, 34);
+  font-size: 24px;
+  line-height: 1.3;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex-direction: column;
+  color: whitesmoke;
+  box-shadow: 1px 1px 40px 10px rgba(0, 0, 0, 0.61);
+}
+.blibliotheque__component.text__alert .content svg {
+  stroke: #ed6e0b;
+}
+.blibliotheque__component::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+  height: 8px;
+}
+.blibliotheque__component::-webkit-scrollbar-thumb {
+  background-color: #ed6e0b;
+  border-radius: 80px;
+}
+.blibliotheque__component table {
+  position: relative;
+  margin: 50px auto 50px auto;
+  color: whitesmoke;
+  z-index: 2;
+  overflow-x: scroll;
+  border-collapse: collapse;
+  border: 1px solid #ed6e0b;
+  max-width: 900px;
+}
+.blibliotheque__component table:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(26, 26, 26);
+  filter: blur(20px) opacity(0.85);
+}
+.blibliotheque__component table thead {
+  color: #ed6e0b;
+}
+.blibliotheque__component table thead th, .blibliotheque__component table thead td {
+  padding: 10px;
+}
+.blibliotheque__component table th, .blibliotheque__component table td {
+  border: 1px solid #ed6e0b;
+  font-weight: 400;
+  border-collapse: collapse;
+  height: 30px;
+  padding: 10px 5px;
+  max-width: 200px;
+  min-width: 70px;
+  overflow: hidden;
+  text-wrap: wrap;
+  word-break: break-all;
+  text-align: center;
+}
+.blibliotheque__component table th.name, .blibliotheque__component table td.name {
+  max-width: 300px;
+  min-width: 150px;
+  padding: 10px 10px;
+  text-wrap: wrap;
+  word-break: break-all;
+}
+.blibliotheque__component table th.qt, .blibliotheque__component table td.qt {
+  color: #ed6e0b;
+}
+.blibliotheque__component table th.qt.alert, .blibliotheque__component table td.qt.alert {
+  color: whitesmoke;
+}
+.blibliotheque__component table th.qt span, .blibliotheque__component table td.qt span {
+  color: whitesmoke;
+  font-size: 12px;
+}
+.blibliotheque__component table th svg, .blibliotheque__component table td svg {
+  cursor: pointer;
+}
+.blibliotheque__component table th a, .blibliotheque__component table td a {
+  color: whitesmoke;
+}
+.blibliotheque__component table .alert {
+  background-color: rgba(255, 78, 78, 0.473);
+}/*# sourceMappingURL=bibliotheque.css.map */

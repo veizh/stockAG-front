@@ -1,0 +1,114 @@
+@import '../mixins/responsive';
+
+.home__component{
+    width: 100vw;
+    height: calc(100vh);
+    padding-top: 90px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    color: whitesmoke;
+    justify-content: center;
+    
+    padding: 90px 25px;
+    .input__container{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        position: relative;
+        overflow: hidden;
+        margin: auto;
+        padding: 20px;
+            overflow: hidden;
+            border-style: solid;
+        color: white;
+        z-index: 2;
+        border-width: 3px;
+        border-image: linear-gradient(135deg, #ed6e0b 0%, rgba(255, 255, 255, 0) 12%, rgba(255, 255, 255, 0) 88%, #ed6e0b 100%)1;
+        &:after{
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: -1;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(26, 26, 26);
+            filter: blur(40px) opacity(0.85) ;
+        }
+    }
+    label{
+        z-index: 2;
+        position: relative;
+        font-size: 24px;
+        width: 100%;
+        display: block;
+        line-height: 1.2;
+        max-width: 450px;
+        @include desktop{
+            font-size: 30px;
+        }
+    }
+    
+        .subcontainer{
+            display: flex;
+            justify-content: space-between;
+        height: 50px;
+            
+            margin-top: 15px;
+            width: 100%;
+            max-width: 450px;
+            background-color: whitesmoke;
+            border-radius: 12px;
+            overflow: hidden;
+            @include desktop{
+                height: 60px;
+            }
+            input{
+                all: unset;
+                color: rgb(24, 23, 23);
+                font-size: 24px;
+                width: 100%;
+                padding-left: 15px;
+                padding-top: 5px;
+                &:focus-visible{
+                    outline: unset;
+                }
+        }
+
+    }
+    button{
+        all:unset;
+        margin-top: 15px;
+       width: 100%;
+        cursor: pointer;
+        background-color: #ed6e0b;
+        color: whitesmoke;
+        text-transform: uppercase;
+        text-align: center;
+        align-self: first baseline;
+        display: flex;
+        padding: 3px 0 0 0;
+        font-size: 18px;
+        align-items: center;
+        justify-content: center;
+        min-height: 35px;
+        align-self: flex-end;
+        font-weight: 400;
+        max-width: 200px;
+        margin-top: 20px;
+        &:hover{
+            filter: brightness(1.3);
+        }
+        svg{
+            margin-left: 5px;
+            margin-bottom: 5px;
+            stroke-width: 1.5px;
+            
+        }
+
+    }
+    
+}

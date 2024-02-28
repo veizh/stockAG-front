@@ -48,7 +48,7 @@ const AddNewProduct = (props) => {
   function submitIsOk(e){
     e.preventDefault();
     if(!name.current.value || !reference.current.value || !quantity.current.value || !min.current.value || !max.current.value || !maker.current.value || !location.current.value){
-      setAlert('Il faut remplir tout les champs')
+      setAlert('Il faut remplir tout les champs et avec les bonnes valeurs')
       return
     }else{
       let tmp ={"name":name.current.value,"ref":reference.current.value.toUpperCase(),"quantity":quantity.current.value,"minQuantity":min.current.value,"maxQuantity":max.current.value,"maker":maker.current.value,"location":location.current.value.toUpperCase()}

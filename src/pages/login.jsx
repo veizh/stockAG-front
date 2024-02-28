@@ -21,8 +21,7 @@ const LoginElement = (props) => {
         method: "POST",
         headers: {
           "Accept": "*/*",
-          "Content-Type": "application/json",
-          "Sec-Fetch-Mode":"no-cors"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(user),
       })

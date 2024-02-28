@@ -16,7 +16,7 @@ const LoginElement = (props)=>{
         fetch(server+"users/login",{ 
             method:"POST",  
             headers: {
-                
+                "Access-Control-Allow-Origin":" *",
               "Accept": "*/*",
             "Content-Type": "application/json"
             },

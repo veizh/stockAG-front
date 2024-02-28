@@ -13,7 +13,7 @@ const LoginElement = (props)=>{
         e.preventDefault()
         localStorage.removeItem('JWT')
         let user = {mail:username.current.value,password:password.current.value}
-        fetch("users/login",{ 
+        fetch(server+"users/login",{ 
             method:"POST",  
             headers: {
               "Accept": "*/*",

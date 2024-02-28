@@ -15,10 +15,7 @@ const LoginElement = (props)=>{
         let user = {mail:username.current.value,password:password.current.value}
         fetch(server+"users/login",{ 
             method:"POST",  
-            referrerPolicy:"no-referrer",
-            
             headers: {
-                "Access-Control-Allow-Origin": "*",
               "Accept": "*/*",
             "Content-Type": "application/json"
             },

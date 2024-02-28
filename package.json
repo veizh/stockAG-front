@@ -2,6 +2,7 @@
   "name": "front",
   "version": "0.1.0",
   "private": true,
+  "proxy":"http://stock-ag-back-p9vppe3lh-veizh.vercel.app/",
   "dependencies": {
     "@react-pdf/renderer": "^3.3.8",
     "@testing-library/jest-dom": "^5.17.0",

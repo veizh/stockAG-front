@@ -16,7 +16,7 @@ const LoginElement = (props)=>{
         fetch(server+"users/login",{ 
             method:"POST",  
             headers: {
-                "mode":"cors",
+                
               "Accept": "*/*",
             "Content-Type": "application/json"
             },

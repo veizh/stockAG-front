@@ -20,8 +20,9 @@ const LoginElement = (props) => {
       fetch(server + "users/login", {
         method: "POST",
         headers: {
-          Accept: "*/*",
+          "Accept": "*/*",
           "Content-Type": "application/json",
+          "Sec-Fetch-Mode":"no-cors"
         },
         body: JSON.stringify(user),
       })

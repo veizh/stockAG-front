@@ -32,7 +32,7 @@ const Qr= ()=>{
             <div className="text" >Référence: {product&&product.ref}<br/>Localisation: {product&&product.location}</div>
             <QRCode   size={512}
     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-    value={`http://192.168.1.96:3000/product/${id}`}
+    value={`https://stock-ag-front.vercel.app/product/${id}`}
     viewBox={`0 0 256 256`} />
         </div>
         <button onClick={() => toPDF()}>Télécharger le QRcode</button>

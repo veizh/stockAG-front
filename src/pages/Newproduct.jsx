@@ -20,7 +20,7 @@ const AddNewProduct = (props) => {
       method:"POST",   headers: {
         "Accept": "*/*",
  "Content-Type": "application/json",
- "authorization": 'bearer ' + localStorage.getItem('JWT')
+ "Authorization": 'Bearer ' + localStorage.getItem('JWT')
       },
       body: JSON.stringify(newProduct)
     })

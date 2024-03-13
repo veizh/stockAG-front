@@ -77,10 +77,10 @@ const Bibliotheque = (props) => {
     })
       .then((res) => res.json())
       .then((res) => console.log(res));
-      setTimeout(() => {
+     
         
         setToggleModif(true);
-      }, 800);
+      
   }
   function clearInputsValues() {
     ref.current.value = ref.current.defaultValue;
@@ -98,10 +98,8 @@ const Bibliotheque = (props) => {
     })
       .then((res) => res.json())
       .then((res) => console.log(res));
-      setTimeout(() => {
-        
         setToggleModif(true);
-      }, 800);
+     
   }
   function modalAction(e, key) {
     e.preventDefault();
@@ -148,6 +146,7 @@ const Bibliotheque = (props) => {
       
   }
   useEffect(() => {
+    setLoading(true)
     getAllProducts();
     setToggleModif(false);
   }, [toggleModif]);

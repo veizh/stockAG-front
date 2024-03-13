@@ -26,7 +26,7 @@ const AddNewProduct = (props) => {
     })
     .then(res=>res.json())
     .then((res)=>{
-      res.err && setAlert(res.msg)}
+      res.err? setAlert(res.msg):setAlert(res.msg)}
       );
     setNewProduct(null)
   }

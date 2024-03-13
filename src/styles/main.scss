@@ -6,7 +6,6 @@
     box-sizing: border-box;
     font-family: 'Josefin Sans', sans-serif;
 }
-
 .App{
     width: 100vw;
     height: 100vh;
@@ -196,8 +195,8 @@ dialog{
         align-items: center;
         background: white;
          padding: 16px ;
-          width:100%;
-          max-width: 350px;
+         width:300px;
+
           aspect-ratio: 1/1;
           max-height:500px;
           .text{

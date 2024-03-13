@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-import { useParams,useNavigate } from "react-router-dom";
 import { usePDF } from 'react-to-pdf';
+import { useParams,useNavigate } from "react-router-dom";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
 
@@ -30,7 +30,7 @@ const Qr= ()=>{
     
         <div className="child" ref={targetRef} >
             <div className="text" >Référence: {product&&product.ref}<br/>Localisation: {product&&product.location}</div>
-            <QRCode   size={512}
+            <QRCode  size={512}
     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
     value={`https://stock-ag-front.vercel.app/product/${id}`}
     viewBox={`0 0 256 256`} />

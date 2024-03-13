@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
+import "../styles/allqr/allqr.css"
 import {
   Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle,} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
+import QRCode from "react-qr-code";
+import {Margin, usePDF } from "react-to-pdf";
+import Loading from "../components/loading";
 const Bibliotheque = (props) => {
   let dialog = useRef();
   let ref = useRef();
@@ -19,13 +23,17 @@ const Bibliotheque = (props) => {
   let [updatedProduct, setUpdatedProduct] = useState(null);
   let [allProducts, setAllProducts] = useState(null);
   let [toggleModif, setToggleModif] = useState(false);
+  let [loading, setLoading] = useState(true);
   let setAlert = props.alert;
   useEffect(() => {
     if (productData) {
       clearInputsValues();
     }
   }, [productData]);
-
+  const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`,
+  page: { margin: Margin.SMALL } 
+ 
+})
   function updateController() {
     if (
       maker.current.value === "" ||
@@ -132,16 +140,25 @@ const Bibliotheque = (props) => {
       method: "GET",
     })
       .then((res) => res.json())
-      .then((res) => setAllProducts(res));
+      .then((res) => {
+        setAllProducts(res)
+       
+        setLoading(false)
+      });
+      
   }
   useEffect(() => {
     getAllProducts();
     setToggleModif(false);
   }, [toggleModif]);
-
-  if (
+  if(loading){
+    return(
+      <Loading />
+    )
+  }
+  else if (
     !Array.isArray(allProducts) ||
-    (allProducts && allProducts.length === 0)
+    (!loading && allProducts.length === 0)
   ) {
     return (
       <>
@@ -157,9 +174,31 @@ const Bibliotheque = (props) => {
         </div>
       </>
     );
-  } else
+  }
+  else{
+
+
     return (
       <>
+      <div className="pdf__file" ref={targetRef}>
+      {allProducts.map((product, i) => {
+        return (
+          <div className="child" key={i} >
+            <div className="text">
+              Référence: {product && product.ref}
+              <br />
+              Localisation: {product && product.location}
+            </div>
+            <QRCode
+              size={512}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              value={`https://stock-ag-front.vercel.app/product/${product.ref}`}
+              viewBox={`0 0 256 256`}
+            />
+          </div>
+        )
+      })}
+    </div>
         <dialog className="modal" autoFocus ref={dialog}>
           <div className="head">
             <div className="container">
@@ -186,6 +225,7 @@ const Bibliotheque = (props) => {
             />
           </div>
           <div className="main">
+
             <div className="container__input">
               <label htmlFor="name">réference: </label>
               <input
@@ -260,6 +300,8 @@ const Bibliotheque = (props) => {
           </div>
         </dialog>
         <div className="blibliotheque__component">
+         <button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>
+
           <table>
             <thead>
               <tr>
@@ -320,6 +362,7 @@ const Bibliotheque = (props) => {
         </div>
       </>
     );
+  }
 };
 
-export default Bibliotheque;
+export default Bibliotheque

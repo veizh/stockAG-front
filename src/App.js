@@ -21,6 +21,7 @@ function App() {
   function alertfc(msg){
     setAlert(msg)
   }
+  
   useEffect(  () => {
     async function verifyJwt(){
       if (localStorage.getItem("JWT")&&!user) {

@@ -2,59 +2,46 @@ import { Link } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
 import {
-  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle,} from "lucide-react";
+  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon,} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
 import QRCode from "react-qr-code";
-import {Margin, usePDF } from "react-to-pdf";
+import {Margin, usePDF,Resolution } from "react-to-pdf";
 import Loading from "../components/loading";
 const Bibliotheque = (props) => {
   let dialog = useRef();
   let ref = useRef();
-  let maker = useRef();
   let min = useRef();
   let max = useRef();
   let quantity = useRef();
   let location = useRef();
   let name = useRef();
+  let pdfRef = useRef()
   let [modifyName, setModifyName] = useState(false);
+  let [filtrer, setFiltrer] = useState(false);
   let [productData, setProductData] = useState(null);
   let [updatedProduct, setUpdatedProduct] = useState(null);
+  let [loading, setLoading] = useState(true);
   let [allProducts, setAllProducts] = useState(null);
   let [toggleModif, setToggleModif] = useState(false);
-  let [loading, setLoading] = useState(true);
   let setAlert = props.alert;
   useEffect(() => {
     if (productData) {
       clearInputsValues();
     }
-  }, [productData]);
-  const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`,
-  page: { margin: Margin.SMALL } 
  
-})
+  }, [productData]);
+  const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`,resolution:Resolution.LOW,
+  page: { margin: Margin.SMALL } })
   function updateController() {
-    if (
-      maker.current.value === "" ||
-      location.current.value === "" ||
-      !quantity.current.value ||
-      !min.current.value ||
-      !max.current.value ||
-      name.current.value === "" ||
-      ref.current.value === ""
-    ) {
-      ref.current.value = ref.current.defaultValue;
-      name.current.value = name.current.defaultValue;
-      quantity.current.value = quantity.current.defaultValue;
-      min.current.value = min.current.defaultValue;
-      max.current.value = max.current.defaultValue;
-      location.current.value = location.current.defaultValue;
-      maker.current.value = maker.current.defaultValue;
-      return setAlert(
-        "Tout les champs doivent être remplies pour effectuer un changement !"
-      );
-    } else return true;
+    console.log(typeof Number(min.current.value))
+    console.log(Number(min.current.value));
+    if( isNaN(Number(min.current.value)) || isNaN(Number(max.current.value)) || isNaN(Number(quantity.current.value)) ){
+      setAlert("La quantité doit être un nombre")
+      return false
+    }
+    return true;
   }
   function updateProduct() {
     fetch(server + "products/updateOne/" + productData.ref, {
@@ -66,13 +53,12 @@ const Bibliotheque = (props) => {
       },
       body: JSON.stringify({
         _id: productData._id,
-        ref: ref.current.value.toUpperCase(),
+        ref: ref.current.value,
         name: name.current.value,
         quantity: quantity.current.value,
         minQuantity: min.current.value,
         maxQuantity: max.current.value,
         location: location.current.value.toUpperCase(),
-        maker: maker.current.value,
       }),
     })
       .then((res) => res.json())
@@ -89,7 +75,6 @@ const Bibliotheque = (props) => {
     min.current.value = min.current.defaultValue;
     max.current.value = max.current.defaultValue;
     location.current.value = location.current.defaultValue;
-    maker.current.value = maker.current.defaultValue;
   }
   function deleteProduct() {
     fetch(server + "products/deleteOne/" + productData.ref, {
@@ -126,7 +111,29 @@ const Bibliotheque = (props) => {
         break;
     }
   }
-
+  async function modifyAlert(element){
+   fetch(server+"products/updateOne/" + element.ref,{
+     method: "PUT",
+     headers: {
+       Accept: "*/*",
+       "Content-Type": "application/json",
+       authorization: "bearer " + localStorage.getItem("JWT"),
+     },
+     body: JSON.stringify({
+       _id: element._id,
+       ref:element.ref,
+       name: element.name,
+       quantity: element.quantity,
+       minQuantity: element.minQuantity,
+       maxQuantity: element.maxQuantity,
+       location: element.location.toUpperCase(),
+        alert:false,
+     }),
+   })
+   .then((res) => res.json())
+   .then((res) => console.log(res));
+   setToggleModif(true);
+  }
   //fetch toutes les references
   async function getAllProducts() {
     fetch(server + "products/getAll", {
@@ -145,6 +152,8 @@ const Bibliotheque = (props) => {
       });
       
   }
+  
+
   useEffect(() => {
     setLoading(true)
     getAllProducts();
@@ -179,7 +188,7 @@ const Bibliotheque = (props) => {
 
     return (
       <>
-      <div className="pdf__file" ref={targetRef}>
+          <div className="pdf__file" ref={targetRef}>
       {allProducts.map((product, i) => {
         return (
           <div className="child" key={i} >
@@ -230,7 +239,7 @@ const Bibliotheque = (props) => {
               <input
                 ref={ref}
                 type="text"
-                defaultValue={productData ? productData.ref : ""}
+                defaultValue={productData ? productData.ref : null}
               />
             </div>
             <div className="container__input">
@@ -238,7 +247,7 @@ const Bibliotheque = (props) => {
               <input
                 ref={quantity}
                 type="text"
-                defaultValue={productData ? productData.quantity : ""}
+                defaultValue={productData ? productData.quantity : null}
               />
             </div>
             <div className="container__input">
@@ -246,7 +255,7 @@ const Bibliotheque = (props) => {
               <input
                 ref={min}
                 type="text"
-                defaultValue={productData ? productData.minQuantity : ""}
+                defaultValue={productData ? productData.minQuantity : null}
               />
             </div>
             <div className="container__input">
@@ -254,7 +263,7 @@ const Bibliotheque = (props) => {
               <input
                 ref={max}
                 type="text"
-                defaultValue={productData ? productData.maxQuantity : ""}
+                defaultValue={productData ? productData.maxQuantity : null}
               />
             </div>
             <div className="container__input">
@@ -262,15 +271,7 @@ const Bibliotheque = (props) => {
               <input
                 ref={location}
                 type="text"
-                defaultValue={productData ? productData.location : ""}
-              />
-            </div>
-            <div className="container__input">
-              <label htmlFor="name">Fournisseur: </label>
-              <input
-                ref={maker}
-                type="text"
-                defaultValue={productData ? productData.maker : ""}
+                defaultValue={productData ? productData.location : null}
               />
             </div>
           </div>
@@ -299,6 +300,7 @@ const Bibliotheque = (props) => {
           </div>
         </dialog>
         <div className="blibliotheque__component">
+         <button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>
          <button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>
 
           <table>
@@ -310,7 +312,7 @@ const Bibliotheque = (props) => {
                 <th scope="col">Réference</th>
                 <th scope="col">Lieu</th>
                 <th scope="col">Quantité</th>
-                <th scope="col">Fournisseur</th>
+                <th scope="col">Etat</th>
                 <th scope="col">QR code</th>
                 <th scope="col"></th>
               </tr>
@@ -318,43 +320,77 @@ const Bibliotheque = (props) => {
             <tbody>
               {allProducts &&
                 allProducts.map((element, i) => {
-                  return (
-                    <tr key={i}>
-                      <th scope="row" className="name">
-                        {element.name}
-                      </th>
-                      <td>{element.ref}</td>
-                      <td>{element.location}</td>
-                      <td
-                        className={
-                          Number(element.minQuantity) >
-                            Number(element.quantity) ||
-                          Number(element.quantity) > Number(element.maxQuantity)
-                            ? "alert qt"
-                            : "qt"
-                        }
-                      >
-                        {element.quantity}
-                        <br />
-                        <span>min: {element.minQuantity}</span> <br />
-                        <span>max: {element.maxQuantity}</span>
-                      </td>
-                      <td>{element.maker}</td>
-                      <td>
-                        <Link to={`/qr/${element.ref}`}>Lien</Link>
-                      </td>
-                      <td>
-                        <Settings
-                          size={25}
-                          strokeWidth={1.5}
-                          onClick={() => {
-                            setProductData(element);
-                            dialog.current.showModal();
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
+                  if(filtrer && element.alert){
+                    return (
+                      <tr key={i} >
+                        <th scope="row" className="name">
+                          {element.name}
+                        </th>
+                        <td>{element.ref}</td>
+                        <td>{element.location}</td>
+                        <td
+                          className={
+                            Number(element.minQuantity) >
+                              Number(element.quantity) ||
+                            Number(element.quantity) > Number(element.maxQuantity)
+                              ? "alert qt"
+                              : "qt"
+                          }
+                        >
+                          {element.quantity}
+                        </td>
+                        <td>{<PackageMinusIcon stroke="#b33729" onClick={()=>modifyAlert(element)} />}</td>
+                        <td>
+                          <Link to={`/qr/${element.ref}`}>Lien</Link>
+                        </td>
+                        <td>
+                          <Settings
+                            size={25}
+                            strokeWidth={1.5}
+                            onClick={() => {
+                              setProductData(element);
+                              dialog.current.showModal();
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  }
+                  else{
+                    return <tr key={i} className={filtrer?"invisible":"visible"}>
+                    <th scope="row" className="name">
+                      {element.name}
+                    </th>
+                    <td>{element.ref}</td>
+                    <td>{element.location}</td>
+                    <td
+                      className={
+                        Number(element.minQuantity) >
+                          Number(element.quantity) ||
+                        Number(element.quantity) > Number(element.maxQuantity)
+                          ? "alert qt"
+                          : "qt"
+                      }
+                    >
+                      {element.quantity}
+                    </td>
+                    <td>{element.alert?<PackageMinusIcon onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon stroke="#40b329" />}</td>
+                    <td>
+                      <Link to={`/qr/${element.ref}`}>Lien</Link>
+                    </td>
+                    <td>
+                      <Settings
+                        size={25}
+                        strokeWidth={1.5}
+                        onClick={() => {
+                          setProductData(element);
+                          dialog.current.showModal();
+                        }}
+                      />
+                    </td>
+                  </tr>
+                  }
+                 
                 })}
             </tbody>
           </table>

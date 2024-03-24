@@ -11,6 +11,8 @@ import "./styles/Navbar/navbar.css";
 import Bibliotheque from "./pages/Bibliotheque";
 import { createContext, useContext, useEffect, useState } from "react";
 import { server } from "./utils/server";
+import Pushingpage from "./pages/pushAll";
+import Account from "./pages/account";
 export const UserCtx = createContext();
 UserCtx.displayName = "userCtx";
 
@@ -50,12 +52,15 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home alert={(e)=>alertfc(e)} />} />
+        <Route path="/pushall" element={<Pushingpage />} />
         <Route path="/product/:id" element={<Product alert={(e)=>alertfc(e)}/>} />
         <Route path="/qr/:id" element={<Qr />} />
         <Route path="/product/create" element={<AddNewProduct alert={(e)=>alertfc(e)}/>} />
         <Route path="/stock" element={<Bibliotheque alert={(e)=>alertfc(e)}/>} />
+        <Route path="/account" element={<Account alert={(e)=>alertfc(e)}/>} />
         <Route path="/identification" element={<LoginElement  alert={(e)=>alertfc(e)}/>} />
       </Routes>
+      
     </div>
     </UserCtx.Provider >
   );

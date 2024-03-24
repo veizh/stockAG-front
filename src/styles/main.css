@@ -105,10 +105,10 @@ dialog .main .container__input {
   flex-direction: column;
   gap: 7px;
 }
-dialog .main .container__input label {
+dialog .main label {
   font-size: 18px;
 }
-dialog .main .container__input input {
+dialog .main input {
   width: 250px;
   height: 30px;
   font-size: 18px;
@@ -117,16 +117,16 @@ dialog .main .container__input input {
   border: none;
   color: whitesmoke;
 }
-dialog .main .container__input input::-webkit-inner-spin-button {
+dialog .main input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-dialog .main .container__input input::-moz-placeholder {
+dialog .main input::-moz-placeholder {
   color: whitesmoke;
 }
-dialog .main .container__input input::placeholder {
+dialog .main input::placeholder {
   color: whitesmoke;
 }
-dialog .main .container__input input:focus-visible {
+dialog .main input:focus-visible {
   outline: 2px solid #ed6e0b;
 }
 dialog .buttons__container {

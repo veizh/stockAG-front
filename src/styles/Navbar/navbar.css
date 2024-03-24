@@ -1,7 +1,7 @@
 header {
   width: 100vw;
   background: rgb(31, 30, 30);
-  height: 90px;
+  height: 70px;
   top: 0;
   position: fixed;
   display: flex;
@@ -53,16 +53,16 @@ header ul {
   display: none;
   list-style: none;
   right: 0;
-  top: 90px;
+  top: 70px;
   position: fixed;
-  background: rgb(31, 30, 30);
+  background: #1f1e1e;
   gap: 20px;
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
   width: 300px;
   padding: 30px 24px;
-  height: calc(100vh - 90px);
+  height: calc(100vh - 70px);
   z-index: 21;
 }
 @media (min-width: 992px) {

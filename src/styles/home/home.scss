@@ -3,27 +3,24 @@
 .home__component{
     width: 100vw;
     height: calc(100vh);
-    padding-top: 90px;
     display: flex;
     align-items: flex-start;
     flex-direction: column;
     color: whitesmoke;
-    justify-content: center;
-    
-    padding: 90px 25px;
+    gap: 25px;
+    padding: 90px 25px 25px 25px;
     .input__container{
         display: flex;
+        position: relative;
         flex-direction: column;
         width: 100%;
         max-width: 500px;
-        height: auto;
-        position: relative;
         overflow: hidden;
-        margin: auto;
-        padding: 20px;
-            overflow: hidden;
+        margin: 25px auto 0 auto;
+        padding: 20px 20px 35px 20px;
             border-style: solid;
         color: white;
+        gap: 15px;
         z-index: 2;
         border-width: 3px;
         border-image: linear-gradient(135deg, #ed6e0b 0%, rgba(255, 255, 255, 0) 12%, rgba(255, 255, 255, 0) 88%, #ed6e0b 100%)1;
@@ -38,6 +35,57 @@
             background-color: rgb(26, 26, 26);
             filter: blur(40px) opacity(0.85) ;
         }
+    }
+    .list__container{
+        width: 100%;
+        max-width: 800px;
+        height: calc(100%);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        overflow-Y: scroll;
+        overflow-x: hidden;
+        gap: 3px;
+        height: 100%;
+        &::-webkit-scrollbar{
+            all: unset;
+            width: 3px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background-color: #ed6e0b;
+        }
+        .list__item{
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            background-color:#1f1e1e;
+            color: whitesmoke;
+            padding: 5px 15px;
+            &:hover{
+                filter: brightness(1.3);
+            }
+            .item{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .item__name{
+                flex: 1;
+                height: 100%;
+                justify-content: flex-start;
+            }
+            .item__ref{
+                width: 25%;
+                height: 100%;
+            }
+            .item__location{
+                width: 25%;
+                height: 100%;
+            }
+        }
+
     }
     label{
         z-index: 2;
@@ -55,24 +103,23 @@
         .subcontainer{
             display: flex;
             justify-content: space-between;
-        height: 50px;
+                height: 35px;
             
-            margin-top: 15px;
             width: 100%;
             max-width: 450px;
             background-color: whitesmoke;
             border-radius: 12px;
-            overflow: hidden;
             @include desktop{
-                height: 60px;
+                height: 35px;
             }
             input{
                 all: unset;
                 color: rgb(24, 23, 23);
-                font-size: 24px;
+                font-size: 22px;
                 width: 100%;
+                padding-top: 1.8px;
+                height: 35px;
                 padding-left: 15px;
-                padding-top: 5px;
                 &:focus-visible{
                     outline: unset;
                 }

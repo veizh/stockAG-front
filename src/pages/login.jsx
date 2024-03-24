@@ -40,7 +40,7 @@ const LoginElement = (props) => {
   return (
     <div className="login__component">
       <form>
-        <label htmlFor="username">Mail:</label>
+        <label htmlFor="username">Nom de compte:</label>
         <input ref={username} name="username" type="text" />
         <label htmlFor="password">Mot de passe:</label>
 

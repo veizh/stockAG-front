@@ -1,6 +1,6 @@
 import { useEffect,useRef, useState,useContext } from "react"
 import "../styles/product/product.css"
-import { Hand,Ban,CheckCircle2,XCircle } from "lucide-react";
+import { Ban,CheckCircle2,XCircle, AlertTriangleIcon } from "lucide-react";
 import {  useNavigate, useParams } from "react-router-dom"
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
@@ -26,8 +26,8 @@ const Product = (props)=>{
     useEffect( () =>{
       getProduct()
     },[])
-    function updateQuantity(){
-      fetch(server+"products/updateQuantityOnly/"+id,{
+    function updateQuantityAndAlert(){
+      fetch(server+"products/updateQuantityAndAlert/"+id,{
         method:"PUT",  
         headers: {
           "Accept": "*/*",
@@ -50,17 +50,30 @@ const Product = (props)=>{
             else{Navigate("/")}
             
 
-          }, 650);
+          }, 500);
         }})
     }
+    function sendEmail(){
+      fetch(server+"users/mail",{ 
+method:"POST",   headers: {
+"Accept": "*/*",
+"Content-Type": "application/json"
+}, body: JSON.stringify(product)})
+    }
     function modalAction(e, key) {
+
         e.preventDefault();
         switch (key) {
           case "cancel":
             dialog.current.close();
             break;
           case "update":
-            updateQuantity()
+            product.newQuantity=quantity
+
+            updateQuantityAndAlert()  
+            sendEmail()
+             
+            
 
             
             // add a function to update from teh back
@@ -70,20 +83,20 @@ const Product = (props)=>{
             break;
         }
       }
+ 
     
+  
     return(
         <>
         <dialog className="modal product" autoFocus ref={dialog}>
         <div className="head">
-          <p>Servez-vous !</p>
+          <p>Alerte Rupture </p>
           <XCircle size={35} onClick={(e) => {modalAction(e,"cancel")}} />
         </div>
         <div className="main">
           <div className="container__input">
-            <div className="text">Produits disponible: {product&&product.quantity}</div>
-            <label htmlFor="name">Combien de produit prenez-vous ? </label>
-            <input onChange={(e)=>{setQuantity(-e.target.value)}} type="number" placeholder={0} min={1} max={product&&product.quantity} />
-            <div className="text">Produit restant: {product&&product.quantity+quantity}</div>
+            <label htmlFor="name">Combien d'exemplaires reste t'il ? </label>
+            <input onChange={(e)=>{setQuantity(e.target.value)}} type="number" placeholder={0} min={1} max={product&&product.quantity} />
           </div>
        
         
@@ -102,18 +115,16 @@ const Product = (props)=>{
               modalAction(e, "update");
             }}
           >
-            Valider <CheckCircle2 />
+            Signaler la Rupture <CheckCircle2 />
           </button>
         </div>
       </dialog>
         <div className="product__component">
             <div className="product__card">
-                <div className="product__item name">{product&&product.name}</div>
+                <div className="product__item name"  >{product&&product.name}</div>
                 <div className="product__item"><span>Localisation:</span> {product&&product.location}</div>
                 <div className="product__item"><span>Référence:</span> {product&&product.ref}</div>
-                <div className="product__item"><span>Quantité:</span> {product&&product.quantity}</div>
-                <div className="product__item"><span>Fournisseur:</span> {product&&product.maker}</div>
-                <div className="buttons__container"><button onClick={()=>{dialog.current.showModal()}}>Se servir <Hand  strokeWidth={1.8}/></button></div>
+                <div className="buttons__container"><button onClick={()=>{dialog.current.showModal()}}>Signaler <AlertTriangleIcon  strokeWidth={1.8}/></button></div>
             </div>
         </div>
         </>

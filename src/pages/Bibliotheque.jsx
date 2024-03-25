@@ -338,7 +338,7 @@ const Bibliotheque = (props) => {
                         >
                           {element.quantity}
                         </td>
-                        <td>{<PackageMinusIcon stroke="#b33729" onClick={()=>modifyAlert(element)} />}</td>
+                        <td>{<PackageMinusIcon stroke="#b33729" size={17} onClick={()=>modifyAlert(element)} />}</td>
                       
                       </tr>
                     );
@@ -362,7 +362,7 @@ const Bibliotheque = (props) => {
                     >
                       {element.quantity}
                     </td>
-                    <td>{element.alert?<PackageMinusIcon onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon stroke="#40b329" />}</td>
+                    <td>{element.alert?<PackageMinusIcon size={17} onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon size={17}  stroke="#40b329" />}</td>
                   
                   
                   </tr>

@@ -146,7 +146,7 @@
   text-align: center;
 }
 .blibliotheque__component table th.name, .blibliotheque__component table td.name {
-  max-width: 250px;
+  max-width: 140px;
   min-width: 50px;
   padding: 10px 10px;
   text-wrap: wrap;

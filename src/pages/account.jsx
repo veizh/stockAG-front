@@ -98,7 +98,7 @@ function toggleRole(e){
                     <div className="col oranged">Role</div>
                 </div>
         {accList&&accList.map((e,i)=>{
-        if(context&&context[0].mail===e.mail)return
+        if(context[0].mail&&context[0].mail===e.mail)return
        return( <div key={i} className="row_acc" onClick={()=>{
             setDataCrt(e)
                 

@@ -309,9 +309,9 @@ const Bibliotheque = (props) => {
                 <th scope="col" className="name">
                   Produit
                 </th>
-                <th scope="col">Réference</th>
+                <th scope="col">Réf</th>
                 <th scope="col">Lieu</th>
-                <th scope="col">Nb</th>
+                <th scope="col">Qté</th>
                 <th scope="col">Etat</th>
               </tr>
             </thead>
@@ -326,7 +326,7 @@ const Bibliotheque = (props) => {
                           {element.name}
                         </th>
                         <td>{element.ref}</td>
-                        <td>{element.location}</td>
+                        <td>480</td>
                         <td
                           className={
                             Number(element.minQuantity) >
@@ -350,7 +350,7 @@ const Bibliotheque = (props) => {
                       {element.name}
                     </th>
                     <td>{element.ref}</td>
-                    <td>{element.location}</td>
+                    <td>480</td>
                     <td
                       className={
                         Number(element.minQuantity) >

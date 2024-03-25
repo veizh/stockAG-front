@@ -111,10 +111,12 @@
         margin: 25px auto 50px auto;
         color: whitesmoke;
         z-index: 2;
+        padding: 2px;
         overflow-x: scroll;
             border-collapse: collapse;
             border: 1px solid #ed6e0b;
             max-width: 900px;
+            width: 99%;
   
             &:after{
                 content: "";
@@ -150,6 +152,7 @@
                 max-width: 140px;
                 min-width: 50px;
                 padding: 10px 10px;
+                font-size: 13px;
                 text-wrap: wrap;
                 word-break: break-all;
             }

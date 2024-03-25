@@ -311,10 +311,8 @@ const Bibliotheque = (props) => {
                 </th>
                 <th scope="col">Réference</th>
                 <th scope="col">Lieu</th>
-                <th scope="col">Quantité</th>
+                <th scope="col">Nb</th>
                 <th scope="col">Etat</th>
-                <th scope="col">QR code</th>
-                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -323,7 +321,8 @@ const Bibliotheque = (props) => {
                   if(filtrer && element.alert){
                     return (
                       <tr key={i} >
-                        <th scope="row" className="name">
+                        <th scope="row" onClick={ ()=>{setProductData(element);
+                          dialog.current.showModal()}} className="name">
                           {element.name}
                         </th>
                         <td>{element.ref}</td>
@@ -340,25 +339,14 @@ const Bibliotheque = (props) => {
                           {element.quantity}
                         </td>
                         <td>{<PackageMinusIcon stroke="#b33729" onClick={()=>modifyAlert(element)} />}</td>
-                        <td>
-                          <Link to={`/qr/${element.ref}`}>Lien</Link>
-                        </td>
-                        <td>
-                          <Settings
-                            size={25}
-                            strokeWidth={1.5}
-                            onClick={() => {
-                              setProductData(element);
-                              dialog.current.showModal();
-                            }}
-                          />
-                        </td>
+                      
                       </tr>
                     );
                   }
                   else{
                     return <tr key={i} className={filtrer?"invisible":"visible"}>
-                    <th scope="row" className="name">
+                    <th scope="row" onClick={ ()=>{setProductData(element);
+                          dialog.current.showModal()}} className="name">
                       {element.name}
                     </th>
                     <td>{element.ref}</td>
@@ -375,19 +363,8 @@ const Bibliotheque = (props) => {
                       {element.quantity}
                     </td>
                     <td>{element.alert?<PackageMinusIcon onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon stroke="#40b329" />}</td>
-                    <td>
-                      <Link to={`/qr/${element.ref}`}>Lien</Link>
-                    </td>
-                    <td>
-                      <Settings
-                        size={25}
-                        strokeWidth={1.5}
-                        onClick={() => {
-                          setProductData(element);
-                          dialog.current.showModal();
-                        }}
-                      />
-                    </td>
+                  
+                  
                   </tr>
                   }
                  

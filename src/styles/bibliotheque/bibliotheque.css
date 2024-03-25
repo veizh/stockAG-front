@@ -46,9 +46,7 @@
 .blibliotheque__component {
   width: 100vw;
   height: 100vh;
-  padding: 90px 20px 0 20px;
-  overflow-y: scroll;
-  overflow-x: scroll;
+  padding: 90px 0 0 0;
 }
 .blibliotheque__component .invisible {
   display: none;
@@ -99,7 +97,7 @@
 }
 .blibliotheque__component::-webkit-scrollbar {
   background-color: transparent;
-  width: 8px;
+  width: 0;
   height: 8px;
 }
 .blibliotheque__component::-webkit-scrollbar-thumb {
@@ -140,15 +138,16 @@
   height: 30px;
   padding: 10px 5px;
   max-width: 200px;
-  min-width: 70px;
+  min-width: 15px;
   overflow: hidden;
+  font-size: 11px;
   text-wrap: wrap;
   word-break: break-all;
   text-align: center;
 }
 .blibliotheque__component table th.name, .blibliotheque__component table td.name {
-  max-width: 300px;
-  min-width: 150px;
+  max-width: 250px;
+  min-width: 50px;
   padding: 10px 10px;
   text-wrap: wrap;
   word-break: break-all;

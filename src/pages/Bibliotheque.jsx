@@ -1,16 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
 import {
-  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon,} from "lucide-react";
+  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon, QrCode,} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
 import QRCode from "react-qr-code";
 import {Margin, usePDF,Resolution } from "react-to-pdf";
 import Loading from "../components/loading";
+import { data } from "../utils/data";
 const Bibliotheque = (props) => {
   let dialog = useRef();
+  let Navigate = useNavigate()
   let ref = useRef();
   let min = useRef();
   let max = useRef();
@@ -19,7 +21,7 @@ const Bibliotheque = (props) => {
   let name = useRef();
   let pdfRef = useRef()
   let [modifyName, setModifyName] = useState(false);
-  let [filtrer, setFiltrer] = useState(false);
+  let [filtrer, setFiltrer] = useState(true);
   let [productData, setProductData] = useState(null);
   let [updatedProduct, setUpdatedProduct] = useState(null);
   let [loading, setLoading] = useState(true);
@@ -131,7 +133,7 @@ const Bibliotheque = (props) => {
      }),
    })
    .then((res) => res.json())
-   .then((res) => console.log(res));
+   .then((res) => console.log(res))
    setToggleModif(true);
   }
   //fetch toutes les references
@@ -209,21 +211,11 @@ const Bibliotheque = (props) => {
     </div>
         <dialog className="modal" autoFocus ref={dialog}>
           <div className="head">
-            <div className="container">
-              <input
-                className={modifyName ? "open" : ""}
-                ref={name}
-                type="text"
-                readOnly={modifyName ? false : true}
-                defaultValue={productData && productData.name}
-              />
-              {!modifyName && (
-                <Pencil
-                  onClick={() => {
-                    setModifyName(!modifyName);
-                  }}
-                />
-              )}
+            <div className="container midfy">
+              
+              <div className="namep">
+                <p className="namepe">{productData && productData.name}</p><p className="qr" onClick={()=>Navigate(productData &&"/qr/"+productData.ref)}><QrCode size={27} stroke="#ed6e0b" /></p>
+              </div>
             </div>
             <XCircle
               size={35}
@@ -233,9 +225,17 @@ const Bibliotheque = (props) => {
             />
           </div>
           <div className="main">
-
+          <div className="container__input">
+              <label htmlFor="name">nom du produit : </label>
+              <input
+                className={ "open" }
+                ref={name}
+                type="text"
+                defaultValue={productData && productData.name}
+              />
+            </div>
             <div className="container__input">
-              <label htmlFor="name">réference: </label>
+              <label htmlFor="name">réference : </label>
               <input
                 ref={ref}
                 type="text"
@@ -243,7 +243,7 @@ const Bibliotheque = (props) => {
               />
             </div>
             <div className="container__input">
-              <label htmlFor="name">Quantité: </label>
+              <label htmlFor="name">Quantité : </label>
               <input
                 ref={quantity}
                 type="text"
@@ -251,7 +251,7 @@ const Bibliotheque = (props) => {
               />
             </div>
             <div className="container__input">
-              <label htmlFor="name">Quantité Min: </label>
+              <label htmlFor="name">Quantité Min : </label>
               <input
                 ref={min}
                 type="text"
@@ -259,7 +259,7 @@ const Bibliotheque = (props) => {
               />
             </div>
             <div className="container__input">
-              <label htmlFor="name">Quantité Max: </label>
+              <label htmlFor="name">Quantité Max : </label>
               <input
                 ref={max}
                 type="text"
@@ -267,7 +267,7 @@ const Bibliotheque = (props) => {
               />
             </div>
             <div className="container__input">
-              <label htmlFor="name">Localisation: </label>
+              <label htmlFor="name">Localisation : </label>
               <input
                 ref={location}
                 type="text"
@@ -276,14 +276,14 @@ const Bibliotheque = (props) => {
             </div>
           </div>
           <div className="buttons__container">
-            <button
+            <button className="delete"
               onClick={(e) => {
                 modalAction(e, "delete");
               }}
             >
-              Supprimer <Trash2 strokeWidth={1.4} />
+              Supprimer <Trash2  strokeWidth={1.4} />
             </button>
-            <button
+            <button 
               onClick={(e) => {
                 modalAction(e, "cancel");
               }}
@@ -291,6 +291,7 @@ const Bibliotheque = (props) => {
               Annuler <Ban />
             </button>
             <button
+            className="validate"
               onClick={(e) => {
                 modalAction(e, "update");
               }}
@@ -300,8 +301,11 @@ const Bibliotheque = (props) => {
           </div>
         </dialog>
         <div className="blibliotheque__component">
+          <div className="action__container">
+
          <button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>
          <button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>
+          </div>
 
           <table>
             <thead>
@@ -326,7 +330,7 @@ const Bibliotheque = (props) => {
                           {element.name}
                         </th>
                         <td>{element.ref}</td>
-                        <td>480</td>
+                        <td className="location">{element.location}</td>
                         <td
                           className={
                             Number(element.minQuantity) >
@@ -338,7 +342,7 @@ const Bibliotheque = (props) => {
                         >
                           {element.quantity}
                         </td>
-                        <td>{<PackageMinusIcon stroke="#b33729" size={17} onClick={()=>modifyAlert(element)} />}</td>
+                        <td>{<PackageMinusIcon stroke="#b33729" size={19} onClick={()=>modifyAlert(element)} />}</td>
                       
                       </tr>
                     );
@@ -350,7 +354,7 @@ const Bibliotheque = (props) => {
                       {element.name}
                     </th>
                     <td>{element.ref}</td>
-                    <td>480</td>
+                    <td className="location">{element.location}</td>
                     <td
                       className={
                         Number(element.minQuantity) >
@@ -362,7 +366,7 @@ const Bibliotheque = (props) => {
                     >
                       {element.quantity}
                     </td>
-                    <td>{element.alert?<PackageMinusIcon size={17} onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon size={17}  stroke="#40b329" />}</td>
+                    <td>{element.alert?<PackageMinusIcon size={19} onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon size={19}  stroke="#40b329" />}</td>
                   
                   
                   </tr>

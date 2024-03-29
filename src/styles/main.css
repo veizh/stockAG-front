@@ -285,4 +285,12 @@ dialog .buttons__container button:focus-visible, dialog .buttons__container butt
 .alert__container .text p {
   color: whitesmoke;
   text-align: center;
+}
+
+.validate {
+  background-color: rgb(35, 143, 35) !important;
+}
+
+.delete {
+  background-color: #ff2b2b !important;
 }/*# sourceMappingURL=main.css.map */

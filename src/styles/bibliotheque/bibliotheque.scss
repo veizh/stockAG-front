@@ -45,7 +45,7 @@
 .blibliotheque__component{
     width: 100vw;
     height: 100vh;
-    padding: 90px 0 0 0;
+    padding: 90px 4px 0 4px;
     .invisible{
         display: none;
     }
@@ -98,23 +98,26 @@
         background-color: transparent;
         width:0;
         height: 8px;
+        display: none;
         @include desktop{
-
+            display: block;
         }
     }
     &::-webkit-scrollbar-thumb{
         background-color: #ed6e0b;
-        border-radius: 80px;
+        border-radius: 80px; @include desktop{
+            display: block;
+        }
     }
     table{
         position: relative;
-        margin: 25px auto 50px auto;
+        margin: 15px auto 50px auto;
         color: whitesmoke;
         z-index: 2;
-        padding: 2px;
         overflow-x: scroll;
             border-collapse: collapse;
-            border: 1px solid #ed6e0b;
+            border-top: 1px solid #ed6e0b;
+            border-bottom: 1px solid #ed6e0b;
             max-width: 900px;
             width: 99%;
   
@@ -129,6 +132,13 @@
                 background-color: rgb(26, 26, 26);
                 filter: blur(20px) opacity(0.85) ;
             }
+            th{
+                border-left: unset!important;
+                @include desktop{
+            border-left: 1px solid #ed6e0b !important;
+
+                }
+            }
             thead{
                 color: #ed6e0b;
                 th,td{
@@ -136,25 +146,39 @@
                 }
             }
         th,td{
-            border: 1px solid #ed6e0b;
             font-weight: 400;
             border-collapse: collapse;
             height: 30px;
-            padding: 10px 5px;
-            max-width: 200px;
+            padding: 8px 2.5px;
+            border-top: 1px solid #ed6e0b;
+            border-left: 1px solid #ed6e0b;
+
             min-width: 15px;
             overflow: hidden;
             font-size: 11px;
             text-wrap: wrap;
             word-break: break-all;
             text-align: center;
+            .location{
+                max-width: 90px;
+            }
+           @include desktop{
+            border: 1px solid #ed6e0b;
+            font-size: 17px;
+            padding: 11px 7px;
+
+           }
             &.name{
                 max-width: 140px;
                 min-width: 50px;
                 padding: 10px 10px;
+                cursor: pointer;
                 font-size: 13px;
                 text-wrap: wrap;
                 word-break: break-all;
+                @include desktop{
+                    font-size: 17px;
+                }
             }
             &.qt{
                 color: #ed6e0b;
@@ -168,6 +192,10 @@
             }
             svg{
                 cursor: pointer;
+                @include desktop{
+                    width: 25px!important;
+                    height: 25px!important;
+                }
             }
             a{
                color: whitesmoke;
@@ -176,5 +204,42 @@
         .alert{
             background-color: rgba(255, 78, 78, 0.473);
         }
+    }
+}
+.action__container{
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+width: 100%;
+justify-content: center;
+gap: 12px;
+    button{
+        margin: unset!important;
+}
+}
+.midfy{
+    width: 100%;
+    height: auto!important;
+    max-width: 450px;
+}
+.namep{
+    font-size: 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    width: 100%;
+    .namepe{
+        width: 100%;
+        max-width: 300px;
+        overflow: hidden;
+        line-height: 1.3;
+        word-break:keep-all;
+        text-overflow: ellipsis;
+    }
+    .qr{
+        margin-right: 10px;
+        height: 100%!important;
+        aspect-ratio: 1/1!important;
     }
 }

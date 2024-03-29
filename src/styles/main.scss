@@ -236,6 +236,7 @@ dialog{
         background-color: #ed6e0b;
         font-weight: 400;
         color: white;
+       
         &:hover{
             filter: brightness(1.2);
             cursor: pointer;
@@ -287,4 +288,10 @@ dialog{
             text-align: center;
         }
     }
+}
+.validate{
+    background-color: rgb(35, 143, 35)!important;
+}
+.delete{
+    background-color: #ff2b2b!important;
 }

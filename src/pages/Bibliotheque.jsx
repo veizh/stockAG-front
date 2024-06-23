@@ -21,7 +21,7 @@ const Bibliotheque = (props) => {
   let name = useRef();
   let pdfRef = useRef()
   let [modifyName, setModifyName] = useState(false);
-  let [filtrer, setFiltrer] = useState(true);
+  let [filtrer, setFiltrer] = useState(false);
   let [productData, setProductData] = useState(null);
   let [updatedProduct, setUpdatedProduct] = useState(null);
   let [loading, setLoading] = useState(true);

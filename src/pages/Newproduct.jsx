@@ -14,6 +14,7 @@ const AddNewProduct = (props) => {
   const max= useRef();
   const location= useRef();
   const maker= useRef();
+  const annexe=useRef()
   let setAlert = props.alert
   function createNewProduct(){
     fetch(server+"products/create", { 
@@ -51,7 +52,7 @@ const AddNewProduct = (props) => {
       setAlert('Il faut au moins remplir les champs référence et nom')
       return
     }else{
-      let tmp ={"name":name.current.value,"ref":reference.current.value.toUpperCase(),"quantity":quantity.current.value,"minQuantity":min.current.value,"maxQuantity":max.current.value,"maker":maker.current.value,"location":location.current.value.toUpperCase()}
+      let tmp ={"name":name.current.value,"ref":reference.current.value.toUpperCase(),"quantity":quantity.current.value,"minQuantity":min.current.value,"maxQuantity":max.current.value,"fournisseur":maker.current.value,"annexe":annexe.current.value,"location":location.current.value.toUpperCase()}
       setNewProduct(tmp)
       dialog.current.showModal()
       return 
@@ -75,6 +76,7 @@ const AddNewProduct = (props) => {
         <div className="item"><div className="label">Max: </div>{newProduct.maxQuantity}</div>
         <div className="item"><div className="label">Fournisseur: </div>{newProduct.maker}</div>
         <div className="item"><div className="label">Localisation: </div>{newProduct.location}</div>
+        <div className="item"><div className="label">annexe: </div>{newProduct.annexe}</div>
        
         </>:""
       }</div>
@@ -108,8 +110,10 @@ const AddNewProduct = (props) => {
         <label htmlFor="maxquantity">Quantité max:</label>
         <input ref={max} autoComplete="off" name="maxquantity" type="number" />
 </div></div>
+        <label htmlFor="annexe">Champ annexe(pour la recherche):</label>
+        <input ref={annexe} autoComplete="off" name="maker" type="text" />
         <label htmlFor="maker">Fournisseur:</label>
-        <input ref={maker} autoComplete="off" name="maker" type="text" />
+        <input ref={maker} autoComplete="off" name="location" type="text" />
 
         <label htmlFor="location">Localisation:</label>
         <input ref={location} autoComplete="off" name="location" type="text" />

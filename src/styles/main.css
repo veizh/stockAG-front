@@ -6,22 +6,34 @@
   font-family: "Josefin Sans", sans-serif;
 }
 
-.App {
-  width: 100vw;
+body {
+  overflow-y: auto;
   height: 100vh;
-  background: rgb(26, 26, 26);
-  background-image: url("../../public/bg-test.png");
-  background-size: cover;
-  overflow-y: scroll;
+}
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 .App::-webkit-scrollbar {
-  background-color: transparent;
-  width: 4px;
+  background: transparent none;
+  background-color: whitesmoke;
+  border: solid 4px transparent;
+  border-right-width: 8px;
 }
 .App::-webkit-scrollbar-thumb {
   background-color: #ed6e0b;
-  border-radius: 80px;
+}
+
+.background {
+  z-index: -2;
+  background-image: url("../../public/bg-test.png");
+  background-size: cover;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
 }
 
 dialog {

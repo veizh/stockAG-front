@@ -6,19 +6,32 @@
     align-items: center;
     justify-content: center;
     .buttons__container{
+        margin-top: 12px;
         width: 100%;
         display: flex;
+        gap: 15px;
         justify-content: flex-end;
             button{
                 text-align: center;
                 justify-content: center;
-                width: 120px;
+                &.add{
+                    background-color: #238f23;
+                }
+                &.remove{
+                    background-color: #ff2b2b;
+                }
+                p{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 5px;
+                }
             }
         
         button{
             outline: none;
             border: none;
-            padding: 7px;
+            padding: 4px 7px;
             font-size: 18px;
             border-radius: 0;
             background-color: #ed6e0b;
@@ -29,7 +42,6 @@
             cursor: pointer;
             svg{
                 width: 22px;
-                margin-bottom: 5px;
             }
             &:hover{
                 filter: brightness(1.3);
@@ -43,7 +55,7 @@
     .product__card{
         padding: 15px 25px;
         width: 100%;
-        max-width: 500px;
+        max-width: 550px;
         border: 2px solid;
        
         border-width: 3px;

@@ -7,19 +7,32 @@
   justify-content: center;
 }
 .product__component .buttons__container {
+  margin-top: 12px;
   width: 100%;
   display: flex;
+  gap: 15px;
   justify-content: flex-end;
 }
 .product__component .buttons__container button {
   text-align: center;
   justify-content: center;
-  width: 120px;
+}
+.product__component .buttons__container button.add {
+  background-color: #238f23;
+}
+.product__component .buttons__container button.remove {
+  background-color: #ff2b2b;
+}
+.product__component .buttons__container button p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 }
 .product__component .buttons__container button {
   outline: none;
   border: none;
-  padding: 7px;
+  padding: 4px 7px;
   font-size: 18px;
   border-radius: 0;
   background-color: #ed6e0b;
@@ -31,7 +44,6 @@
 }
 .product__component .buttons__container button svg {
   width: 22px;
-  margin-bottom: 5px;
 }
 .product__component .buttons__container button:hover {
   filter: brightness(1.3);
@@ -43,7 +55,7 @@
 .product__component .product__card {
   padding: 15px 25px;
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   border: 2px solid;
   border-width: 3px;
   -o-border-image: linear-gradient(135deg, #ed6e0b 0%, rgba(255, 255, 255, 0) 16%, rgba(255, 255, 255, 0) 84%, #ed6e0b 100%) 1;

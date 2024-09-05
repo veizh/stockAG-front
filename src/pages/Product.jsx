@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import "../styles/product/product.css";
-import { Ban, CheckCircle2, XCircle, AlertTriangleIcon } from "lucide-react";
+import { Ban, CheckCircle2, XCircle, AlertTriangleIcon, PackageMinusIcon,PackagePlusIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
@@ -10,7 +10,8 @@ const Product = (props) => {
   let [product, setProduct] = useState();
   let [quantity, setQuantity] = useState(0);
   const user = useContext(UserCtx)[0];
-  let dialog = useRef();
+  let dialogRemove = useRef();
+  let dialogAdd = useRef();
   let Navigate = useNavigate();
   let setAlert = props.alert;
   function getProduct() {
@@ -29,7 +30,77 @@ const Product = (props) => {
   useEffect(() => {
     getProduct();
   }, []);
+  function addProductAndHandleAlert(){
+    console.log('add');
+    
+    fetch(server + "products/addProductAndHandleAlert/" + id, {
+      method: "PUT",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        authorization: "bearer " + localStorage.getItem("JWT"),
+      },
+      body: JSON.stringify({ quantity: quantity }),
+    }).then((res) => {
+      if(res.status === 201){
+        sendEmail();
+
+      }
+      if (res.status === 207) {
+        dialogAdd.current.close();
+        dialogRemove.current.close();
+
+        setAlert(
+          "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
+        );
+      } else {
+        setTimeout(() => {
+          if (user.role === "admin") {
+            Navigate("/stock");
+          } else {
+            Navigate("/");
+          }
+        }, 500);
+      }
+    });
+  }
+  function removeProductAndHandleAlert(){
+    console.log('add');
+    
+    fetch(server + "products/removeProductAndHandleAlert/" + id, {
+      method: "PUT",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        authorization: "bearer " + localStorage.getItem("JWT"),
+      },
+      body: JSON.stringify({ quantity: quantity }),
+    }).then((res) => {
+      if(res.status === 201){
+        sendEmail();
+
+      }
+      if (res.status === 207) {
+        dialogAdd.current.close();
+        dialogRemove.current.close();
+
+        setAlert(
+          "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
+        );
+      } else {
+        setTimeout(() => {
+          if (user.role === "admin") {
+            Navigate("/stock");
+          } else {
+            Navigate("/");
+          }
+        }, 500);
+      }
+    });
+  }
   function updateQuantityAndAlert() {
+    console.log("update");
+    
     fetch(server + "products/updateQuantityAndAlert/" + id, {
       method: "PUT",
       headers: {
@@ -40,7 +111,8 @@ const Product = (props) => {
       body: JSON.stringify({ quantity: quantity }),
     }).then((res) => {
       if (res.status === 207) {
-        dialog.current.close();
+        dialogAdd.current.close();
+        dialogRemove.current.close();
 
         setAlert(
           "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
@@ -70,17 +142,25 @@ const Product = (props) => {
     e.preventDefault();
     switch (key) {
       case "cancel":
-        dialog.current.close();
+        
+      dialogAdd.current.close();
+      dialogRemove.current.close();
         break;
       case "update":
         product.newQuantity = quantity;
 
         updateQuantityAndAlert();
-        sendEmail();
 
-        // add a function to update from teh back
+      case "add":
+          product.newQuantity = Number(product.quantity)+Number(quantity);
+  
+          addProductAndHandleAlert();
 
         break;
+        case "remove":
+          product.newQuantity = Number(product.quantity)-Number(quantity);
+
+          removeProductAndHandleAlert()
       default:
         break;
     }
@@ -88,9 +168,51 @@ const Product = (props) => {
 
   return (
     <>
-      <dialog className="modal product" autoFocus ref={dialog}>
+    <dialog className="modal product add" autoFocus ref={dialogAdd}>
+    <div className="head">
+      <p>Ajout de produits </p>
+      <XCircle
+        size={35}
+        onClick={(e) => {
+          modalAction(e, "cancel");
+        }}
+      />
+    </div>
+    <div className="main">
+      <div className="container__input">
+        <label htmlFor="name">Combien d'exemplaires ajoutez-vous ? </label>
+        <input
+          onChange={(e) => {
+            setQuantity(e.target.value);
+          }}
+          type="number"
+          placeholder={0}
+          min={1}
+          max={product && product.quantity}
+        />
+      </div>
+    </div>
+    <div className="buttons__container">
+      <button
+        onClick={(e) => {
+          modalAction(e, "cancel");
+        }}
+      >
+        Annuler <Ban />
+      </button>
+      <button
+      className="validate"
+        onClick={(e) => {
+          modalAction(e, "add");
+        }}
+      >
+       <PackagePlusIcon strokeWidth={1.8}  /> Ajouter  <PackagePlusIcon strokeWidth={1.8}  />
+      </button>
+    </div>
+  </dialog>
+      <dialog className="modal product remove" autoFocus ref={dialogRemove}>
         <div className="head">
-          <p>Alerte Rupture </p>
+          <p>Retrait de produits</p>
           <XCircle
             size={35}
             onClick={(e) => {
@@ -100,7 +222,7 @@ const Product = (props) => {
         </div>
         <div className="main">
           <div className="container__input">
-            <label htmlFor="name">Combien d'exemplaires reste t'il ? </label>
+            <label htmlFor="name">Combien d'exemplaires retirez-vous ? </label>
             <input
               onChange={(e) => {
                 setQuantity(e.target.value);
@@ -121,11 +243,12 @@ const Product = (props) => {
             Annuler <Ban />
           </button>
           <button
+          className="delete"
             onClick={(e) => {
-              modalAction(e, "update");
+              modalAction(e, "remove");
             }}
           >
-            Signaler la Rupture <CheckCircle2 />
+            Retirer <PackageMinusIcon strokeWidth={1.8}  />
           </button>
         </div>
       </dialog>
@@ -138,13 +261,23 @@ const Product = (props) => {
           <div className="product__item">
             <span>Référence:</span> {product && product.ref}
           </div>
+          <div className="product__item">
+            <span>Quantité:</span> {product && product.quantity}
+          </div>
           <div className="buttons__container">
             <button
+            className="remove"
               onClick={() => {
-                dialog.current.showModal();
+                dialogRemove.current.showModal();
               }}
-            >
-              Signaler <AlertTriangleIcon strokeWidth={1.8} />
+            ><p><PackageMinusIcon strokeWidth={1.8} size={30} />Retrait<PackageMinusIcon strokeWidth={1.8} size={20} /></p>
+            </button>
+            <button
+            className="add"
+              onClick={() => {
+                dialogAdd.current.showModal();
+              }}
+            ><p><PackagePlusIcon strokeWidth={1.8} size={30} />Ajout<PackagePlusIcon strokeWidth={1.8} size={20} /></p>
             </button>
           </div>
         </div>

@@ -29,7 +29,7 @@ const Qr= ()=>{
     return(<div className="qr__container">
     
         <div className="child" ref={targetRef} >
-            <div className="text" >Référence: {product&&product.ref}<br/>Localisation: {product&&product.location}</div>
+            <div className="text" >produit: {product&&product.name}<br/>Référence: {product&&product.ref}</div>
             <QRCode  size={512}
     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
     value={`https://stock-ag-front.vercel.app/product/${id}`}

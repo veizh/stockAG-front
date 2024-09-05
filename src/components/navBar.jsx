@@ -26,7 +26,7 @@ const NavBar=()=>{
                     
                     <li><NavLink onClick={()=>setListState(!listState)} to="/">Rechercher</NavLink></li>
                     {user.role==="admin"?<li><NavLink onClick={()=>setListState(!listState)} to="/product/create">Ajouter</NavLink></li>:<></>}
-                    {user.role==="admin"?<li><NavLink onClick={()=>setListState(!listState)} to="/stock">Stock</NavLink></li>:<></>}
+                    <li><NavLink onClick={()=>setListState(!listState)} to="/stock">Stock</NavLink></li>
                     {user.role==="admin"?<li><NavLink onClick={()=>setListState(!listState)} to="/account">Comptes</NavLink></li>:<></>}
                     
                     <li><NavLink onClick={()=>{

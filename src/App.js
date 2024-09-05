@@ -44,6 +44,7 @@ function App() {
   },[window.location.pathname]);
   return (
     <UserCtx.Provider value={[user,setUser]}>
+      <div className="background"></div>
     <div className="App">
     <div className={alert?"alert__container open":"alert__container"}>
         <div className="text"><AlertTriangle size={50} strokeWidth={1.75}/><p>{alert}</p><AlertTriangle  size={50} strokeWidth={1.75}/></div>

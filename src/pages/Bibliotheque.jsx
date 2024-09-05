@@ -3,13 +3,14 @@ import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
 import {
   Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon, QrCode,} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
 import QRCode from "react-qr-code";
 import {Margin, usePDF,Resolution } from "react-to-pdf";
 import Loading from "../components/loading";
 import { data } from "../utils/data";
+import { UserCtx } from "../App";
 const Bibliotheque = (props) => {
   let dialog = useRef();
   let Navigate = useNavigate()
@@ -17,6 +18,7 @@ const Bibliotheque = (props) => {
   let min = useRef();
   let max = useRef();
   let quantity = useRef();
+  let annexe = useRef();
   let location = useRef();
   let name = useRef();
   let pdfRef = useRef()
@@ -27,18 +29,23 @@ const Bibliotheque = (props) => {
   let [loading, setLoading] = useState(true);
   let [allProducts, setAllProducts] = useState(null);
   let [toggleModif, setToggleModif] = useState(false);
+  let [role,setRole]=useState(false)
   let setAlert = props.alert;
+  let CTX = useContext(UserCtx)
   useEffect(() => {
     if (productData) {
       clearInputsValues();
     }
- 
   }, [productData]);
+  useEffect(()=>{
+
+    if(CTX[0]){
+      setRole(CTX[0].role)
+    }
+  },[CTX])
   const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`,resolution:Resolution.LOW,
   page: { margin: Margin.SMALL } })
   function updateController() {
-    console.log(typeof Number(min.current.value))
-    console.log(Number(min.current.value));
     if( isNaN(Number(min.current.value)) || isNaN(Number(max.current.value)) || isNaN(Number(quantity.current.value)) ){
       setAlert("La quantité doit être un nombre")
       return false
@@ -46,6 +53,12 @@ const Bibliotheque = (props) => {
     return true;
   }
   function updateProduct() {
+    if(CTX[0]&&CTX[0].role==="employe"){
+      console.log('====================================');
+      console.log("vous n'avez pas les droits de faire ca");
+      console.log('====================================');
+      return
+    }
     fetch(server + "products/updateOne/" + productData.ref, {
       method: "PUT",
       headers: {
@@ -58,17 +71,42 @@ const Bibliotheque = (props) => {
         ref: ref.current.value,
         name: name.current.value,
         quantity: quantity.current.value,
+        annexe: annexe.current.value,
         minQuantity: min.current.value,
         maxQuantity: max.current.value,
         location: location.current.value.toUpperCase(),
       }),
     })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
+      .then((res) =>{ 
+        if(res.status===201){
+          sendEmail({
+            _id: productData._id,
+            ref: ref.current.value,
+            name: name.current.value,
+            quantity: quantity.current.value,
+            annexe: annexe.current.value,
+            minQuantity: min.current.value,
+            maxQuantity: max.current.value,
+            newQuantity: quantity.current.value,
+            location: location.current.value.toUpperCase(),
+          })
+        }
+        
+        res.json()})
      
         
         setToggleModif(true);
       
+  }
+  function sendEmail(product) {
+    fetch(server + "users/mail", {
+      method: "POST",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    });
   }
   function clearInputsValues() {
     ref.current.value = ref.current.defaultValue;
@@ -77,6 +115,7 @@ const Bibliotheque = (props) => {
     min.current.value = min.current.defaultValue;
     max.current.value = max.current.defaultValue;
     location.current.value = location.current.defaultValue;
+    annexe.current.value = annexe.current.defaultValue;
   }
   function deleteProduct() {
     fetch(server + "products/deleteOne/" + productData.ref, {
@@ -190,15 +229,11 @@ const Bibliotheque = (props) => {
 
     return (
       <>
-          <div className="pdf__file" ref={targetRef}>
+         { role!=="employe"&&<div className="pdf__file" ref={targetRef}>
       {allProducts.map((product, i) => {
         return (
           <div className="child" key={i} >
-            <div className="text">
-              Référence: {product && product.ref}
-              <br />
-              Localisation: {product && product.location}
-            </div>
+            <div className="text" >produit: {product&&product.name}<br/>Référence: {product&&product.ref}</div>
             <QRCode
               size={512}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
@@ -208,7 +243,7 @@ const Bibliotheque = (props) => {
           </div>
         )
       })}
-    </div>
+    </div>}
         <dialog className="modal" autoFocus ref={dialog}>
           <div className="head">
             <div className="container midfy">
@@ -274,6 +309,14 @@ const Bibliotheque = (props) => {
                 defaultValue={productData ? productData.location : null}
               />
             </div>
+            <div className="container__input">
+              <label htmlFor="annexe">Champ Annexe : </label>
+              <input
+                ref={annexe}
+                type="text"
+                defaultValue={productData ? productData.annexe : null}
+              />
+            </div>
           </div>
           <div className="buttons__container">
             <button className="delete"
@@ -303,8 +346,8 @@ const Bibliotheque = (props) => {
         <div className="blibliotheque__component">
           <div className="action__container">
 
-         <button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>
-         <button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>
+         {role!=="employe"&&<button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>}
+         {role!=="employe"&&<button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>}
           </div>
 
           <table>
@@ -316,7 +359,6 @@ const Bibliotheque = (props) => {
                 <th scope="col">Réf</th>
                 <th scope="col">Lieu</th>
                 <th scope="col">Qté</th>
-                <th scope="col">Etat</th>
               </tr>
             </thead>
             <tbody>
@@ -325,7 +367,10 @@ const Bibliotheque = (props) => {
                   if(filtrer && element.alert){
                     return (
                       <tr key={i} >
-                        <th scope="row" onClick={ ()=>{setProductData(element);
+                        <th scope="row" onClick={ ()=>{
+                          if(role==="employe")return
+
+                          setProductData(element);
                           dialog.current.showModal()}} className="name">
                           {element.name}
                         </th>
@@ -342,14 +387,15 @@ const Bibliotheque = (props) => {
                         >
                           {element.quantity}
                         </td>
-                        <td>{<PackageMinusIcon stroke="#b33729" size={19} onClick={()=>modifyAlert(element)} />}</td>
                       
                       </tr>
                     );
                   }
                   else{
                     return <tr key={i} className={filtrer?"invisible":"visible"}>
-                    <th scope="row" onClick={ ()=>{setProductData(element);
+                    <th scope="row" onClick={ ()=>{
+                      if(role==="employe")return
+                      setProductData(element);
                           dialog.current.showModal()}} className="name">
                       {element.name}
                     </th>
@@ -358,15 +404,13 @@ const Bibliotheque = (props) => {
                     <td
                       className={
                         Number(element.minQuantity) >
-                          Number(element.quantity) ||
-                        Number(element.quantity) > Number(element.maxQuantity)
+                          Number(element.quantity) 
                           ? "alert qt"
                           : "qt"
                       }
                     >
                       {element.quantity}
                     </td>
-                    <td>{element.alert?<PackageMinusIcon size={19} onClick={()=>modifyAlert(element)} stroke="#b33729" />:<PackageCheckIcon size={19}  stroke="#40b329" />}</td>
                   
                   
                   </tr>

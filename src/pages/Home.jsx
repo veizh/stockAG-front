@@ -38,7 +38,7 @@ const Home = (props) => {
     },[])
    async function filterResult(allProducts){
     let tmp =await  allProducts.filter(e=>{
-      if(e.name.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.ref.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ){
+      if(e.name.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.ref.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.annexe&&e.annexe.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ){
 
         return e
       }
@@ -61,7 +61,7 @@ const Home = (props) => {
               setDataFiltered(null)
              }
             
-            }} placeholder="AAAA" type="text" ></input>
+            }} placeholder="Référence ou Nom produit" type="text" ></input>
           
         </div>
        

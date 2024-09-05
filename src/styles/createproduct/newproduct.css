@@ -1,5 +1,5 @@
 .new__product__component {
-  width: 100vw;
+  width: 100%;
   padding: 110px 15px 60px 15px;
   min-height: 100vh;
   display: flex;

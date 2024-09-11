@@ -82,8 +82,9 @@
             filter: blur(45px) opacity(0.85) ;
         }
         img{
-            width: 200px;
-            aspect-ratio: 91/81;
+            width: 300px;
+            max-height: 300px;
+            object-fit: cover;
         }
         .product__item{
             width: 100%;

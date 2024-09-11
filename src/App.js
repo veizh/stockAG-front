@@ -13,8 +13,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { server } from "./utils/server";
 import Pushingpage from "./pages/pushAll";
 import Account from "./pages/account";
+import { CloudinaryUploader } from "./pages/test";
+import AddImageToProduct from "./pages/AddImageToProduct";
+
 export const UserCtx = createContext();
 UserCtx.displayName = "userCtx";
+
 
 function App() {
   let Navigate = useNavigate();
@@ -53,6 +57,8 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home alert={(e)=>alertfc(e)} />} />
+        <Route path="/CLD" element={<CloudinaryUploader  />} />
+        <Route path="/addImage/:ref" element={<AddImageToProduct  />} />
         <Route path="/pushall" element={<Pushingpage />} />
         <Route path="/product/:id" element={<Product alert={(e)=>alertfc(e)}/>} />
         <Route path="/qr/:id" element={<Qr />} />

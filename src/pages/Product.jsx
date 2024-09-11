@@ -255,6 +255,9 @@ const Product = (props) => {
       <div className="product__component">
         <div className="product__card">
           <div className="product__item name">{product && product.name}</div>
+          {product&&product.imgUrl&&<div>
+            <img src={product.imgUrl} alt="Image du produit"  />
+          </div>}
           <div className="product__item">
             <span>Localisation:</span> {product && product.location}
           </div>

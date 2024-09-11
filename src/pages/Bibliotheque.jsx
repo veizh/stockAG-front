@@ -2,7 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
 import {
-  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon, QrCode,} from "lucide-react";
+  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon, QrCode,
+  BookImage,} from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
@@ -19,6 +20,7 @@ const Bibliotheque = (props) => {
   let max = useRef();
   let quantity = useRef();
   let annexe = useRef();
+  let imgUrl = useRef();
   let location = useRef();
   let name = useRef();
   let pdfRef = useRef()
@@ -53,6 +55,8 @@ const Bibliotheque = (props) => {
     return true;
   }
   function updateProduct() {
+    console.log(imgUrl.current.value);
+    
     if(CTX[0]&&CTX[0].role==="employe"){
       console.log('====================================');
       console.log("vous n'avez pas les droits de faire ca");
@@ -75,6 +79,7 @@ const Bibliotheque = (props) => {
         minQuantity: min.current.value,
         maxQuantity: max.current.value,
         location: location.current.value.toUpperCase(),
+        imgUrl:imgUrl.current.value
       }),
     })
       .then((res) =>{ 
@@ -115,6 +120,7 @@ const Bibliotheque = (props) => {
     min.current.value = min.current.defaultValue;
     max.current.value = max.current.defaultValue;
     location.current.value = location.current.defaultValue;
+    imgUrl.current.value = imgUrl.current.defaultValue;
     annexe.current.value = annexe.current.defaultValue;
   }
   function deleteProduct() {
@@ -152,29 +158,7 @@ const Bibliotheque = (props) => {
         break;
     }
   }
-  async function modifyAlert(element){
-   fetch(server+"products/updateOne/" + element.ref,{
-     method: "PUT",
-     headers: {
-       Accept: "*/*",
-       "Content-Type": "application/json",
-       authorization: "bearer " + localStorage.getItem("JWT"),
-     },
-     body: JSON.stringify({
-       _id: element._id,
-       ref:element.ref,
-       name: element.name,
-       quantity: element.quantity,
-       minQuantity: element.minQuantity,
-       maxQuantity: element.maxQuantity,
-       location: element.location.toUpperCase(),
-        alert:false,
-     }),
-   })
-   .then((res) => res.json())
-   .then((res) => console.log(res))
-   setToggleModif(true);
-  }
+  
   //fetch toutes les references
   async function getAllProducts() {
     fetch(server + "products/getAll", {
@@ -233,7 +217,7 @@ const Bibliotheque = (props) => {
       {allProducts.map((product, i) => {
         return (
           <div className="child" key={i} >
-            <div className="text" >produit: {product&&product.name}<br/>Référence: {product&&product.ref}</div>
+            <div className="text" >{product&&product.name}<br/>Référence: {product&&product.ref}</div>
             <QRCode
               size={512}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
@@ -317,6 +301,17 @@ const Bibliotheque = (props) => {
                 defaultValue={productData ? productData.annexe : null}
               />
             </div>
+            <div className="container__input">
+              <label htmlFor="imgUrl">Url de l'image : </label>
+              <input
+                ref={imgUrl}
+                type="text"
+                defaultValue={productData ? productData.imgUrl&&productData.imgUrl : null}
+              />
+            </div>
+            <div className="container__input">
+             <button className="addImage" onClick={()=>{Navigate(`../addImage/${productData&&productData.ref}`)}}><p>Ajouter une image</p><BookImage /></button>
+            </div>
           </div>
           <div className="buttons__container">
             <button className="delete"
@@ -346,8 +341,8 @@ const Bibliotheque = (props) => {
         <div className="blibliotheque__component">
           <div className="action__container">
 
-         {role!=="employe"&&<button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>}
-         {role!=="employe"&&<button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes.</button>}
+         {<button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>}
+         {role!=="employe"&&<button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes</button>}
           </div>
 
           <table>

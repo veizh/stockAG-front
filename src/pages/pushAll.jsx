@@ -19,17 +19,10 @@ const Pushingpage =()=>{
           );
       }
     async function pushTest(){
-        let tmp =  data.filter(e=>e.type==="Bien")
-        tmp.forEach(e=>{
-            delete e.sv
-            delete e.sr
-            delete e.code 
-            delete e.unite
+        data.forEach(e=>{
             e.alert = false
-            e.location = "undefined"
-            e.name = e.name.toLocaleLowerCase(
-
-            )
+            e.location = ""
+            e.name = e.name.toLocaleLowerCase()
             createNewProduct(e)
         })
         

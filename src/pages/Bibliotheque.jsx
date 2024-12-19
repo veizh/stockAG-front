@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
 import {
-  Settings, XCircle,  Trash2, Ban,CheckCircle2, Pencil,AlertTriangle, PackageMinusIcon, PackageCheckIcon, QrCode,
+   XCircle,  Trash2, Ban,CheckCircle2, AlertTriangle,   QrCode,
   BookImage,} from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { server } from "../utils/server";
@@ -10,7 +10,6 @@ import { addHeaderJWT } from "../utils/header";
 import QRCode from "react-qr-code";
 import {Margin, usePDF,Resolution } from "react-to-pdf";
 import Loading from "../components/loading";
-import { data } from "../utils/data";
 import { UserCtx } from "../App";
 const Bibliotheque = (props) => {
   let dialog = useRef();
@@ -100,7 +99,6 @@ const Bibliotheque = (props) => {
         res.json()})
      
         
-        setToggleModif(true);
       
   }
   function sendEmail(product) {
@@ -343,8 +341,8 @@ const Bibliotheque = (props) => {
 
          {<button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>}
          {role!=="employe"&&<button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes</button>}
+         <button className="qr__codes" onClick={()=>{setToggleModif(true)}}>Rafraichir</button>
           </div>
-
           <table>
             <thead>
               <tr>

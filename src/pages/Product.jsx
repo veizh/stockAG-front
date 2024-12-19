@@ -15,7 +15,7 @@ const Product = (props) => {
   let Navigate = useNavigate();
   let setAlert = props.alert;
   function getProduct() {
-    fetch(server + "products/getOne/" + id, {
+    fetch(server + "products/getOne/" + id.toLocaleUpperCase(), {
       headers: addHeaderJWT(),
       method: "GET",
     })

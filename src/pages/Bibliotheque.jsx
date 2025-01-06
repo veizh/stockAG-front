@@ -23,6 +23,8 @@ const Bibliotheque = (props) => {
   let location = useRef();
   let name = useRef();
   let pdfRef = useRef()
+  let [alphabetically,setAlphabetically]=useState(true)
+  let [placeSort,setPlaceSort]=useState(true)
   let [modifyName, setModifyName] = useState(false);
   let [filtrer, setFiltrer] = useState(false);
   let [productData, setProductData] = useState(null);
@@ -176,12 +178,63 @@ const Bibliotheque = (props) => {
       
   }
   
+  function sortAlphabetically(){
+    let tmp = allProducts
+    let sortedArray = tmp.sort(function(a, b){
+        if(a.name.toUpperCase().trim() < b.name.toUpperCase().trim()) { 
+          if(alphabetically){
+            return -1
+          }else 
+            return 1
+        }
+        if(a.name.toUpperCase().trim() > b.name.toUpperCase().trim()) {
+          if(alphabetically){
+            return 1
+          }else 
+          return -1
+        }
+        return 0;
+    })
+    setAlphabetically(!alphabetically)
+    setAllProducts(sortedArray)
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 250);
+    
+  }
+  function sortByPlace(){
+    let tmp = allProducts
+    let sortedArray = tmp.sort(function(a, b){
+        if(a.location.toUpperCase().trim() < b.location.toUpperCase().trim()) { 
+          if(placeSort){
+            return -1
+          }else 
+            return 1
+        }
+        if(a.location.toUpperCase().trim() > b.location.toUpperCase().trim()) {
+          if(placeSort){
+            return 1
+          }else 
+          return -1
+        }
+        return 0;
+    })
+    setPlaceSort(!placeSort)
+    setAllProducts(sortedArray)
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+    }, 250);
+    
+  }
 
   useEffect(() => {
     setLoading(true)
     getAllProducts();
     setToggleModif(false);
   }, [toggleModif]);
+
   if(loading){
     return(
       <Loading />
@@ -346,11 +399,11 @@ const Bibliotheque = (props) => {
           <table>
             <thead>
               <tr>
-                <th scope="col" className="name">
+                <th scope="col" className="name" onClick={()=>{sortAlphabetically()}}>
                   Produit
                 </th>
                 <th scope="col">Réf</th>
-                <th scope="col">Lieu</th>
+                <th scope="col" className="name" onClick={()=>{sortByPlace()}}>Lieu</th>
                 <th scope="col">Qté</th>
               </tr>
             </thead>

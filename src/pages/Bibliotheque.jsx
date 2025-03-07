@@ -1,6 +1,9 @@
 import {  useNavigate } from "react-router-dom";
 import "../styles/bibliotheque/bibliotheque.css";
 import "../styles/allqr/allqr.css"
+
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import {
    XCircle,  Trash2, Ban,CheckCircle2, AlertTriangle,   QrCode,
   BookImage,} from "lucide-react";
@@ -11,6 +14,84 @@ import QRCode from "react-qr-code";
 import {Margin, usePDF,Resolution } from "react-to-pdf";
 import Loading from "../components/loading";
 import { UserCtx } from "../App";
+import { createRoot } from "react-dom/client"; // ✅ Import corrigé
+
+const PdfGenerator = ({ allProducts }) => {
+  const productsPerPage = 40; // Nombre d'items par page
+
+  const generatePDFs = async () => {
+    const totalProducts = allProducts.length;
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
+
+    for (let pageIndex = 0; pageIndex < totalPages; pageIndex++) {
+      const start = pageIndex * productsPerPage;
+      const end = Math.min(start + productsPerPage, totalProducts);
+      const productsBatch = allProducts.slice(start, end);
+
+      if (productsBatch.length === 0) break; // Si plus de produits, on arrête
+
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageWidth = 210; 
+      const pageHeight = 297; 
+
+      // Création du conteneur temporaire
+      const tempContainer = document.createElement("div");
+      tempContainer.style.width = "800px";
+      tempContainer.style.display = "grid";
+      tempContainer.style.gridTemplateColumns = "repeat(5, 1fr)";
+      tempContainer.style.gap = "10px";
+      tempContainer.style.justifyContent = "center";
+      tempContainer.style.alignItems = "center";
+      tempContainer.style.padding = "20px";
+      tempContainer.style.background = "#fff";
+
+      productsBatch.forEach((product) => {
+        const item = document.createElement("div");
+        item.style.textAlign = "center";
+        item.style.fontSize = "12px";
+
+        item.innerHTML = `<div>${product.ref}</div>`;
+
+        const qrDiv = document.createElement("div");
+        qrDiv.style.marginTop = "5px";
+
+        createRoot(qrDiv).render(
+          <QRCode value={`https://stock-ag-front.vercel.app/product/${product.ref}`} size={120} />
+        );
+
+        item.appendChild(qrDiv);
+        tempContainer.appendChild(item);
+      });
+
+      document.body.appendChild(tempContainer);
+
+      // Attendre un meilleur rendu des QR codes
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Capture de l'image
+      const canvas = await html2canvas(tempContainer, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", 10, 10, pageWidth - 20, pageHeight - 20);
+
+      document.body.removeChild(tempContainer);
+
+      // Sauvegarde du PDF
+      pdf.save(`qrcodes_${pageIndex + 1}.pdf`);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={generatePDFs}>Télécharger les PDFs</button>
+    </div>
+  );
+};
+
+
+
+  
+
+
 const Bibliotheque = (props) => {
   let dialog = useRef();
   let Navigate = useNavigate()
@@ -46,7 +127,7 @@ const Bibliotheque = (props) => {
       setRole(CTX[0].role)
     }
   },[CTX])
-  const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`,resolution:Resolution.LOW,
+  const { toPDF, targetRef } = usePDF({method: "save", filename: `qrcodes.pdf`, resolution:1,
   page: { margin: Margin.SMALL } })
   function updateController() {
     if( isNaN(Number(min.current.value)) || isNaN(Number(max.current.value)) || isNaN(Number(quantity.current.value)) ){
@@ -268,9 +349,9 @@ const Bibliotheque = (props) => {
       {allProducts.map((product, i) => {
         return (
           <div className="child" key={i} >
-            <div className="text" >{product&&product.name}<br/>Référence: {product&&product.ref}</div>
+            <div className="text" ><br/>Référence: {product&&product.ref}</div>
             <QRCode
-              size={512}
+              size={256}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
               value={`https://stock-ag-front.vercel.app/product/${product.ref}`}
               viewBox={`0 0 256 256`}
@@ -393,7 +474,7 @@ const Bibliotheque = (props) => {
           <div className="action__container">
 
          {<button className="qr__codes" onClick={()=>{setFiltrer(!filtrer)}} > {!filtrer?"Voir les produits manquants":"Voir tout les produits "}</button>}
-         {role!=="employe"&&<button className="qr__codes" onClick={toPDF}>Télécharger tout les QR codes</button>}
+         {role!=="employe"&&<PdfGenerator allProducts={allProducts}/>}
          <button className="qr__codes" onClick={()=>{setToggleModif(true)}}>Rafraichir</button>
           </div>
           <table>

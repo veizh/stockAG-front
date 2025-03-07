@@ -82,7 +82,7 @@ const PdfGenerator = ({ allProducts }) => {
 
   return (
     <div>
-      <button onClick={generatePDFs}>Télécharger les PDFs</button>
+      <button className="qr__codes" onClick={generatePDFs}>Télécharger les PDFs</button>
     </div>
   );
 };

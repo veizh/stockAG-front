@@ -33,7 +33,80 @@ body{
     width: 100vw;
     height: 100vh;
 }
-dialog{
+.transfert{
+    background-color: rgb(73, 173, 255) !important;
+}
+button.transfert{
+    background-color: rgb(73, 173, 255) !important;
+}
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     h2{
+        width: 100%;
+        text-align: center!important;
+        background-color: #141414;
+        color: whitesmoke;        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-bottom: 10px;
+        font-size: 35px;
+        border-bottom: #242424 1px solid;
+    }
+  }
+  
+  .modal-box {
+    background: white;
+    padding: 0 0 0 0;
+    border-radius: 12px;overflow: hidden;
+    min-width: 300px;
+    max-width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .invisible{
+    display: none;
+  }
+  .exception{
+    position: fixed;
+    button{
+        padding: 5px 10px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        width: fit-content;
+        text-align: center;
+        gap: 10px;
+        p{
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+        }
+    }
+   
+  }
+  ul{
+    max-width: 800px;
+    width: 100%;
+    list-style: none;
+    max-height: 400px;
+    overflow: auto;
+    li.list{
+        padding: 10px 20px;
+        font-size: 25px;
+        font-weight: 500;
+        cursor: pointer;
+        &:nth-child(even){
+            background-color: #bdbdbd;
+        }
+    }
+}
+dialog,.exception{
     border: unset;
     width: 97%;
     max-width: 900px;
@@ -58,6 +131,7 @@ dialog{
         font-weight: 700;
         font-size: 20px;
         padding: 12px;
+        line-height:30px;
         svg{
             cursor: pointer;
             &:hover{

@@ -1,19 +1,29 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import "../styles/product/product.css";
-import { Ban, CheckCircle2, XCircle, AlertTriangleIcon, PackageMinusIcon,PackagePlusIcon } from "lucide-react";
+import { Ban, CheckCircle2, XCircle, AlertTriangleIcon, PackageMinusIcon,PackagePlusIcon, ListOrdered, ListMinus, ChevronRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { server } from "../utils/server";
 import { addHeaderJWT } from "../utils/header";
 import { UserCtx } from "../App";
+import ModalSelectDiv from "../components/modalSelect";
 const Product = (props) => {
   let { id } = useParams();
   let [product, setProduct] = useState();
   let [quantity, setQuantity] = useState(0);
   const user = useContext(UserCtx)[0];
   let dialogRemove = useRef();
+  let dialogtransfert = useRef();
   let dialogAdd = useRef();
+  let [allSites,setAllsites]= useState()
+  let[dialogTransfertVisible,setDialogTransfertVisible] =useState(false)
+  const [isModalVisible, setModalVisible] = useState(false);  // Gestion de la modale
+  const [selectedSite, setSelectedSite] = useState(null);
   let Navigate = useNavigate();
   let setAlert = props.alert;
+  useEffect(()=>{
+console.log(dialogTransfertVisible);
+
+  },[dialogTransfertVisible])
   function getProduct() {
     fetch(server + "products/getOne/" + id.toLocaleUpperCase(), {
       headers: addHeaderJWT(),
@@ -29,6 +39,7 @@ const Product = (props) => {
   }
   useEffect(() => {
     getProduct();
+    siteAvaible()
   }, []);
   function addProductAndHandleAlert(){
     console.log('add');
@@ -98,6 +109,25 @@ const Product = (props) => {
       }
     });
   }
+  function siteAvaible(){
+    fetch("https://back-material-ag.vercel.app/interventions/getAllInterventions",{
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json"
+      },
+      method: "GET"
+  })  .then((res) => res.json())
+  .then((res) => {
+    let table= []
+    res?.map(e=>{
+      if(e.state!=="Terminé"){
+        table.push(e)
+      }
+    })
+     setAllsites(table)
+     
+  });
+  }
   function updateQuantityAndAlert() {
     console.log("update");
     
@@ -128,6 +158,40 @@ const Product = (props) => {
       }
     });
   }
+  function SendOnSite() {
+    if(!selectedSite) return
+    if(!quantity) return
+    console.log("update");
+    console.log(quantity);
+    console.log(selectedSite);
+    
+ //   fetch(server + "products/updateQuantityAndAlert/" + id, {
+ //     method: "PUT",
+ //     headers: {
+ //       Accept: "*/*",
+ //       "Content-Type": "application/json",
+ //       authorization: "bearer " + localStorage.getItem("JWT"),
+ //     },
+ //     body: JSON.stringify({ quantity: quantity }),
+ //   }).then((res) => {
+ //     if (res.status === 207) {
+ //       dialogAdd.current.close();
+ //       dialogRemove.current.close();
+//
+ //       setAlert(
+ //         "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
+ //       );
+ //     } else {
+ //       setTimeout(() => {
+ //         if (user.role === "admin") {
+ //           Navigate("/stock");
+ //         } else {
+ //           Navigate("/");
+ //         }
+ //       }, 500);
+ //     }
+ //   });
+  }
   function sendEmail() {
     fetch(server + "users/mail", {
       method: "POST",
@@ -150,17 +214,22 @@ const Product = (props) => {
         product.newQuantity = quantity;
 
         updateQuantityAndAlert();
-
+        break
+      case "sendOnSite":
+          product.newQuantity = quantity;
+  
+          SendOnSite();
+          break
       case "add":
           product.newQuantity = Number(product.quantity)+Number(quantity);
   
           addProductAndHandleAlert();
-
-        break;
-        case "remove":
+          break
+      case "remove":
           product.newQuantity = Number(product.quantity)-Number(quantity);
 
           removeProductAndHandleAlert()
+          break
       default:
         break;
     }
@@ -168,6 +237,13 @@ const Product = (props) => {
 
   return (
     <>
+      <ModalSelectDiv
+        show={isModalVisible}  // Contrôle de l'affichage
+        title="Sélectionner un site"
+        options={allSites}
+        onSelect={setSelectedSite}
+        onClose={() => setModalVisible(false)}  // Ferme la modale
+      />
     <dialog className="modal product add" autoFocus ref={dialogAdd}>
     <div className="head">
       <p>Ajout de produits </p>
@@ -200,6 +276,7 @@ const Product = (props) => {
       >
         Annuler <Ban />
       </button>
+      
       <button
       className="validate"
         onClick={(e) => {
@@ -210,6 +287,59 @@ const Product = (props) => {
       </button>
     </div>
   </dialog>
+
+  {dialogTransfertVisible&&<div className="modal  exception product "  autoFocus ref={dialogtransfert}>
+    <div className="head">
+      <p>Envoyer des produits en intervention </p>
+      <XCircle
+        size={35}
+        onClick={() => {
+          
+          setDialogTransfertVisible(null)
+
+        }}
+      />
+    </div>
+    <div className="main">
+      <div className="container__input">
+        <button onClick={() => setModalVisible(true)}><p>{selectedSite?selectedSite[0].clientName:"Choisissez un site"}</p><ChevronRight size={25} /></button>
+        <label htmlFor="name">Combien d'exemplaires emmenez-vous ? </label>
+        <input
+          onChange={(e) => {
+            setQuantity(e.target.value);
+          }}
+          type="number"
+          placeholder={0}
+          min={1}
+          max={product && product.quantity}
+        />
+      </div>
+    </div>
+    <div className="buttons__container">
+      <button
+        onClick={(e) => {
+          setDialogTransfertVisible(false)
+
+
+        }}
+      >
+        Annuler <Ban />
+      </button>
+      
+      <button
+      className="transfert validate "
+        onClick={(e) => {
+          modalAction(e, "sendOnSite");
+          setDialogTransfertVisible(false)
+
+        }}
+      >
+       <PackagePlusIcon strokeWidth={1.8}  /> Envoyer  <PackagePlusIcon strokeWidth={1.8}  />
+      </button>
+    </div>
+  </div>
+      }
+
       <dialog className="modal product remove" autoFocus ref={dialogRemove}>
         <div className="head">
           <p>Retrait de produits</p>
@@ -276,10 +406,20 @@ const Product = (props) => {
             ><p><PackageMinusIcon strokeWidth={1.8} size={30} />Retrait<PackageMinusIcon strokeWidth={1.8} size={20} /></p>
             </button>
             <button
+            className="transfert"
+              onClick={() => {
+                
+                setDialogTransfertVisible(true)
+              }}
+              
+            ><p><PackagePlusIcon strokeWidth={1.8} size={30} />Envoyer sur site<PackagePlusIcon strokeWidth={1.8} size={20} /></p>
+            </button>
+            <button
             className="add"
               onClick={() => {
                 dialogAdd.current.showModal();
               }}
+              
             ><p><PackagePlusIcon strokeWidth={1.8} size={30} />Ajout<PackagePlusIcon strokeWidth={1.8} size={20} /></p>
             </button>
           </div>

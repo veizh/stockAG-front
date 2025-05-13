@@ -162,35 +162,63 @@ console.log(dialogTransfertVisible);
     if(!selectedSite) return
     if(!quantity) return
     console.log("update");
-    console.log(quantity);
-    console.log(selectedSite);
+    let match = false
     
- //   fetch(server + "products/updateQuantityAndAlert/" + id, {
- //     method: "PUT",
- //     headers: {
- //       Accept: "*/*",
- //       "Content-Type": "application/json",
- //       authorization: "bearer " + localStorage.getItem("JWT"),
- //     },
- //     body: JSON.stringify({ quantity: quantity }),
- //   }).then((res) => {
- //     if (res.status === 207) {
- //       dialogAdd.current.close();
- //       dialogRemove.current.close();
-//
- //       setAlert(
- //         "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
- //       );
- //     } else {
- //       setTimeout(() => {
- //         if (user.role === "admin") {
- //           Navigate("/stock");
- //         } else {
- //           Navigate("/");
- //         }
- //       }, 500);
- //     }
- //   });
+    let index = null
+    let updatedIntervention = selectedSite[0]
+    selectedSite[0].materials.forEach((e,i) => {
+    
+ if(e.ref===id){
+      match = true
+      index=i
+    }
+ 
+    } )
+    if(match){
+
+      console.log(updatedIntervention.materials[index]);
+      
+    updatedIntervention.materials[index].quantity=Number(updatedIntervention.materials[index].quantity)+Number(quantity)
+  }else{
+    let item = {name:product.name,quantity:quantity,ref:id}
+    item.quantity=quantity
+    updatedIntervention.materials.push(item)
+  }
+   fetch('https://back-material-ag.vercel.app/interventions/updateIntervention/'+updatedIntervention._id,{
+     method: "PUT",
+     headers: {
+       Accept: "*/*",
+       "Content-Type": "application/json",
+     },
+     body:JSON.stringify(updatedIntervention)
+    
+    }).then(res=>res.json())
+   fetch(server + "products/updateQuantityAndAlert/" + id, {
+     method: "PUT",
+     headers: {
+       Accept: "*/*",
+       "Content-Type": "application/json",
+       authorization: "bearer " + localStorage.getItem("JWT"),
+     },
+     body: JSON.stringify({ quantity: Number(product.quantity)-Number(quantity) }),
+   }).then((res) => {
+     if (res.status === 207) {
+       dialogAdd.current.close();
+       dialogRemove.current.close();
+
+       setAlert(
+         "Vous ne pouvez retirer plus de produits qu'il n'y en a en stock."
+       );
+     } else {
+       setTimeout(() => {
+         if (user.role === "admin") {
+           Navigate("/");
+         } else {
+           Navigate("/");
+         }
+       }, 200);
+     }
+   });
   }
   function sendEmail() {
     fetch(server + "users/mail", {

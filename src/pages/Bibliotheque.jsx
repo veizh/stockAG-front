@@ -101,9 +101,11 @@ const Bibliotheque = (props) => {
   let quantity = useRef();
   let annexe = useRef();
   let imgUrl = useRef();
+  let broken = useRef();
   let location = useRef();
   let name = useRef();
   let pdfRef = useRef()
+  let [brokenSortAsc, setBrokenSortAsc] = useState(true);
   let [alphabetically,setAlphabetically]=useState(true)
   let [placeSort,setPlaceSort]=useState(true)
   let [modifyName, setModifyName] = useState(false);
@@ -156,6 +158,7 @@ const Bibliotheque = (props) => {
         _id: productData._id,
         ref: ref.current.value,
         name: name.current.value,
+        broken: Number(broken.current.value),
         quantity: quantity.current.value,
         annexe: annexe.current.value,
         minQuantity: min.current.value,
@@ -171,6 +174,8 @@ const Bibliotheque = (props) => {
             ref: ref.current.value,
             name: name.current.value,
             quantity: quantity.current.value,
+        broken: Number(broken.current.value),
+
             annexe: annexe.current.value,
             minQuantity: min.current.value,
             maxQuantity: max.current.value,
@@ -199,6 +204,7 @@ const Bibliotheque = (props) => {
     name.current.value = name.current.defaultValue;
     quantity.current.value = quantity.current.defaultValue;
     min.current.value = min.current.defaultValue;
+     broken.current.value = broken.current.defaultValue;
     max.current.value = max.current.defaultValue;
     location.current.value = location.current.defaultValue;
     imgUrl.current.value = imgUrl.current.defaultValue;
@@ -315,7 +321,25 @@ const Bibliotheque = (props) => {
     getAllProducts();
     setToggleModif(false);
   }, [toggleModif]);
+function sortByBroken() {
+  let tmp = [...allProducts]; // Copie défensive
+  let sortedArray = tmp.sort(function (a, b) {
+    let aVal = parseInt(a.broken) || 0;
+    let bVal = parseInt(b.broken) || 0;
 
+    if (brokenSortAsc) {
+      return aVal - bVal;
+    } else {
+      return bVal - aVal;
+    }
+  });
+  setBrokenSortAsc(!brokenSortAsc);
+  setAllProducts(sortedArray);
+  setLoading(true);
+  setTimeout(() => {
+    setLoading(false);
+  }, 250);
+}
   if(loading){
     return(
       <Loading />
@@ -399,6 +423,14 @@ const Bibliotheque = (props) => {
                 ref={quantity}
                 type="text"
                 defaultValue={productData ? productData.quantity : null}
+              />
+            </div>
+             <div className="container__input">
+              <label htmlFor="name">Cassé : </label>
+              <input
+                ref={broken}
+                type="text"
+                defaultValue={productData ? productData.broken : null}
               />
             </div>
             <div className="container__input">
@@ -486,11 +518,13 @@ const Bibliotheque = (props) => {
                 <th scope="col">Réf</th>
                 <th scope="col" className="name" onClick={()=>{sortByPlace()}}>Lieu</th>
                 <th scope="col">Qté</th>
+                <th scope="col" className="name" onClick={sortByBroken}>Cassé</th>
               </tr>
             </thead>
             <tbody>
               {allProducts &&
                 allProducts.map((element, i) => {
+                  console.log(element.broken&&"hehe");
                   if(filtrer && element.alert){
                     return (
                       <tr key={i} >
@@ -514,7 +548,9 @@ const Bibliotheque = (props) => {
                         >
                           {element.quantity}
                         </td>
-                      
+                        <td>
+                          {element.broken?element.broken:"0"}
+                        </td>
                       </tr>
                     );
                   }
@@ -538,7 +574,9 @@ const Bibliotheque = (props) => {
                     >
                       {element.quantity}
                     </td>
-                  
+                   <td >
+                          {element.broken?element.broken:"0"}
+                        </td>
                   
                   </tr>
                   }

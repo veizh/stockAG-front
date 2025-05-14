@@ -215,6 +215,8 @@
 }
 .action__container button {
   margin: unset !important;
+  width: -moz-fit-content !important;
+  width: fit-content !important;
 }
 
 .midfy {

@@ -440,7 +440,7 @@ console.log(dialogTransfertVisible);
                 setDialogTransfertVisible(true)
               }}
               
-            ><p><PackagePlusIcon strokeWidth={1.8} size={30} />Envoyer sur site<PackagePlusIcon strokeWidth={1.8} size={20} /></p>
+            ><p>Envoyer sur site</p>
             </button>
             <button
             className="add"

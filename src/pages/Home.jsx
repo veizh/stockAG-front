@@ -38,7 +38,7 @@ const Home = (props) => {
     },[])
    async function filterResult(allProducts){
     let tmp =await  allProducts.filter(e=>{
-      if(e.name.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.ref.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.annexe&&e.annexe.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ){
+      if(e.name&&e.name.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.ref&&e.ref.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ||e.annexe&&e.annexe.toLocaleLowerCase().includes(refInput.current.value.toLocaleLowerCase()) ){
 
         return e
       }
@@ -83,7 +83,10 @@ const Product__line=(props)=>{
   let Navigate= useNavigate()
 
   return(
-    <div className="list__item" onClick={()=>Navigate("/product/"+props.data.ref)}>
+    <div className="list__item" onClick={()=>{
+      console.log(props.data._id);
+      
+      Navigate("/product/"+props.data._id)}}>
       <div className="item item__name">{props.data.name&&props.data.name}</div>
       <div className="item item__ref">{props.data.ref&&props.data.ref}</div>
       <div className="item item__location">{props.data.location&&props.data.location}</div>

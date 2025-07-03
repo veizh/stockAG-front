@@ -8,15 +8,15 @@ import { addHeaderJWT } from "../utils/header";
 
 const Qr= ()=>{
     let Navigate = useNavigate()
-    let {id} = useParams()
+    let {_id} = useParams()
     let [product,setProduct]=useState(null)
     useEffect(()=>{
        
         getProduct()
-    },[id])
+    },[_id])
     function getProduct(){
 
-        fetch(server+"products/getOne/"+id,{headers:addHeaderJWT(),method:"GET"}).then(res=>res.json()).then(res=>{
+        fetch(server+"products/getOne/"+_id,{headers:addHeaderJWT(),method:"GET"}).then(res=>res.json()).then(res=>{
           if(res.error){
             return Navigate('/')
           }
@@ -29,10 +29,10 @@ const Qr= ()=>{
     return(<div className="qr__container">
     
         <div className="child" ref={targetRef} >
-            <div className="text" >produit: {product&&product.name}<br/>Référence: {product&&product.ref}</div>
-            <QRCode  size={512}
-    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-    value={`https://stock-ag-front.vercel.app/product/${id}`}
+            <div className="text" >{product.name&& product.name}<br/>{product.ref&&"Référence:" +product.ref}</div>
+            <QRCode  size={"fit"}
+    style={{ height: "auto", maxW_idth: "100%", w_idth: "100%" }}
+    value={`https://stock-ag-front.vercel.app/product/${_id}`}
     viewBox={`0 0 256 256`} />
         </div>
         <button onClick={() => toPDF()}>Télécharger le QRcode</button>

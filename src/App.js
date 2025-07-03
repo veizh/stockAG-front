@@ -58,10 +58,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home alert={(e)=>alertfc(e)} />} />
         <Route path="/CLD" element={<CloudinaryUploader  />} />
-        <Route path="/addImage/:ref" element={<AddImageToProduct  />} />
+        <Route path="/addImage/:_id" element={<AddImageToProduct  />} />
         <Route path="/pushall" element={<Pushingpage />} />
-        <Route path="/product/:id" element={<Product alert={(e)=>alertfc(e)}/>} />
-        <Route path="/qr/:id" element={<Qr />} />
+        <Route path="/product/:_id" element={<Product alert={(e)=>alertfc(e)}/>} />
+        <Route path="/qr/:_id" element={<Qr />} />
         <Route path="/product/create" element={<AddNewProduct alert={(e)=>alertfc(e)}/>} />
         <Route path="/stock" element={<Bibliotheque alert={(e)=>alertfc(e)}/>} />
         <Route path="/account" element={<Account alert={(e)=>alertfc(e)}/>} />

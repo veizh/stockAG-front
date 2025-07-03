@@ -11,7 +11,7 @@ const AddImageToProduct =()=>{
     const [image, setImage] = useState(null); // Stocke l'URL de l'image uploadée
     const [file, setFile] = useState(null);   // Stocke le fichier sélectionné
     let [product, setProduct] = useState();
-    let { ref } = useParams();
+    let { _id } = useParams();
     let cloudName= 'dsbsvzqk1' 
     let keysecret="HMwLQEisOA8HQfVVP09HIz4Q3-s"
     let apiKey="932485328589227"
@@ -19,7 +19,7 @@ const AddImageToProduct =()=>{
       setFile(e.target.files[0]); // Capture le fichier image sélectionné
     };
     function getProduct() {
-        fetch(server + "products/getOne/" + ref, {
+        fetch(server + "products/getOne/" + _id, {
           headers: addHeaderJWT(),
           method: "GET",
         })
@@ -69,7 +69,7 @@ const AddImageToProduct =()=>{
             console.log('====================================');
             return
           }
-          fetch(server + "products/updateImage/" + ref, {
+          fetch(server + "products/updateImage/" + _id, {
             method: "PUT",
             headers: {
               Accept: "*/*",
@@ -87,7 +87,7 @@ const AddImageToProduct =()=>{
       <div className='addImageComponent'>
         <div className='container'>
             
-        <h1>Ajouter une image au produit {ref}</h1>
+        <h1>Ajouter une image au produit </h1>
         <form onSubmit={handleSubmit}>
           <input type="file" className='btn__file' onChange={handleImageChange} />
           

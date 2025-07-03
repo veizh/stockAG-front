@@ -56,7 +56,7 @@ const PdfGenerator = ({ allProducts }) => {
         qrDiv.style.marginTop = "5px";
 
         createRoot(qrDiv).render(
-          <QRCode value={`https://stock-ag-front.vercel.app/product/${product.ref}`} size={120} />
+          <QRCode value={`https://stock-ag-front.vercel.app/product/${product._id}`} size={120} />
         );
 
         item.appendChild(qrDiv);
@@ -147,7 +147,7 @@ const Bibliotheque = (props) => {
       console.log('====================================');
       return
     }
-    fetch(server + "products/updateOne/" + productData.ref, {
+    fetch(server + "products/updateOne/" + productData._id, {
       method: "PUT",
       headers: {
         Accept: "*/*",
@@ -211,7 +211,7 @@ const Bibliotheque = (props) => {
     annexe.current.value = annexe.current.defaultValue;
   }
   function deleteProduct() {
-    fetch(server + "products/deleteOne/" + productData.ref, {
+    fetch(server + "products/deleteOne/" + productData._id, {
       method: "delete",
       headers: addHeaderJWT(),
     })
@@ -377,7 +377,7 @@ function sortByBroken() {
             <QRCode
               size={256}
               style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-              value={`https://stock-ag-front.vercel.app/product/${product.ref}`}
+              value={`https://stock-ag-front.vercel.app/product/${product._id}`}
               viewBox={`0 0 256 256`}
             />
           </div>
@@ -389,7 +389,7 @@ function sortByBroken() {
             <div className="container midfy">
               
               <div className="namep">
-                <p className="namepe">{productData && productData.name}</p><p className="qr" onClick={()=>Navigate(productData &&"/qr/"+productData.ref)}><QrCode size={27} stroke="#ed6e0b" /></p>
+                <p className="namepe">{productData && productData.name}</p><p className="qr" onClick={()=>Navigate(productData &&"/qr/"+productData._id)}><QrCode size={27} stroke="#ed6e0b" /></p>
               </div>
             </div>
             <XCircle
@@ -474,7 +474,7 @@ function sortByBroken() {
               />
             </div>
             <div className="container__input">
-             <button className="addImage" onClick={()=>{Navigate(`../addImage/${productData&&productData.ref}`)}}><p>Ajouter une image</p><BookImage /></button>
+             <button className="addImage" onClick={()=>{Navigate(`../addImage/${productData&&productData._id}`)}}><p>Ajouter une image</p><BookImage /></button>
             </div>
           </div>
           <div className="buttons__container">
@@ -535,7 +535,7 @@ function sortByBroken() {
                           dialog.current.showModal()}} className="name">
                           {element.name}
                         </th>
-                        <td>{element.ref}</td>
+                        <td>{element.ref&&element.ref}</td>
                         <td className="location">{element.location}</td>
                         <td
                           className={
@@ -562,7 +562,7 @@ function sortByBroken() {
                           dialog.current.showModal()}} className="name">
                       {element.name}
                     </th>
-                    <td>{element.ref}</td>
+                    <td>{element.ref&&element.ref}</td>
                     <td className="location">{element.location}</td>
                     <td
                       className={

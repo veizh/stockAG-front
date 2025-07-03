@@ -7,7 +7,7 @@ import { addHeaderJWT } from "../utils/header";
 import { UserCtx } from "../App";
 import ModalSelectDiv from "../components/modalSelect";
 const Product = (props) => {
-  let { id } = useParams();
+  let { _id } = useParams();
   let [product, setProduct] = useState();
   let [quantity, setQuantity] = useState(0);
   const user = useContext(UserCtx)[0];
@@ -25,7 +25,7 @@ console.log(dialogTransfertVisible);
 
   },[dialogTransfertVisible])
   function getProduct() {
-    fetch(server + "products/getOne/" + id.toLocaleUpperCase(), {
+    fetch(server + "products/getOne/" + _id, {
       headers: addHeaderJWT(),
       method: "GET",
     })
@@ -44,7 +44,7 @@ console.log(dialogTransfertVisible);
   function addProductAndHandleAlert(){
     console.log('add');
     
-    fetch(server + "products/addProductAndHandleAlert/" + id, {
+    fetch(server + "products/addProductAndHandleAlert/" + _id, {
       method: "PUT",
       headers: {
         Accept: "*/*",
@@ -78,7 +78,7 @@ console.log(dialogTransfertVisible);
   function removeProductAndHandleAlert(){
     console.log('add');
     
-    fetch(server + "products/removeProductAndHandleAlert/" + id, {
+    fetch(server + "products/removeProductAndHandleAlert/" + _id, {
       method: "PUT",
       headers: {
         Accept: "*/*",
@@ -131,7 +131,7 @@ console.log(dialogTransfertVisible);
   function updateQuantityAndAlert() {
     console.log("update");
     
-    fetch(server + "products/updateQuantityAndAlert/" + id, {
+    fetch(server + "products/updateQuantityAndAlert/" + _id, {
       method: "PUT",
       headers: {
         Accept: "*/*",
@@ -168,7 +168,7 @@ console.log(dialogTransfertVisible);
     let updatedIntervention = selectedSite[0]
     selectedSite[0].materials.forEach((e,i) => {
     
- if(e.ref===id){
+ if(e._id===_id){
       match = true
       index=i
     }
@@ -180,7 +180,7 @@ console.log(dialogTransfertVisible);
       
     updatedIntervention.materials[index].quantity=Number(updatedIntervention.materials[index].quantity)+Number(quantity)
   }else{
-    let item = {name:product.name,quantity:quantity,ref:id}
+    let item = {name:product.name,quantity:quantity,ref:product.ref}
     item.quantity=quantity
     updatedIntervention.materials.push(item)
   }
@@ -193,7 +193,7 @@ console.log(dialogTransfertVisible);
      body:JSON.stringify(updatedIntervention)
     
     }).then(res=>res.json())
-   fetch(server + "products/updateQuantityAndAlert/" + id, {
+   fetch(server + "products/updateQuantityAndAlert/" + _id, {
      method: "PUT",
      headers: {
        Accept: "*/*",
